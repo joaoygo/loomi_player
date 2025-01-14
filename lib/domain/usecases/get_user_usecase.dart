@@ -6,7 +6,7 @@ class GetUserUseCase {
 
   GetUserUseCase(this._userRepository);
 
-  UserModel? call() {
-    return _userRepository.getUser();
+  UserModel? call(String uid) {
+    return _userRepository.getUser(uid);
   }
 }

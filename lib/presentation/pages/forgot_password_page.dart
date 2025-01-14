@@ -75,7 +75,8 @@ class ForgotPasswordPage extends StatelessWidget {
                   SizedBox(height: 11),
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: SecondaryButton(text: "Back", ontap: () {}))
+                      child: SecondaryButton(
+                          text: "Back", ontap: () => Navigator.pop(context)))
                 ]))),
           );
         }));

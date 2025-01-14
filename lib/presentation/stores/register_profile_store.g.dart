@@ -49,6 +49,14 @@ mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
     return _$saveUserAsyncAction.run(() => super.saveUser(uid, email));
   }
 
+  late final _$clearUserAsyncAction =
+      AsyncAction('_RegisterProfileStore.clearUser', context: context);
+
+  @override
+  Future<void> clearUser(String uid) {
+    return _$clearUserAsyncAction.run(() => super.clearUser(uid));
+  }
+
   late final _$_RegisterProfileStoreActionController =
       ActionController(name: '_RegisterProfileStore', context: context);
 

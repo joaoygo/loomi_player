@@ -24,6 +24,8 @@ class RegisterProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Observer(builder: (_) {
@@ -51,13 +53,22 @@ class RegisterProfilePage extends StatelessWidget {
               ),
               SizedBox(height: 64),
               PrimaryButton(
-                ontap: () {},
+                ontap: () {
+                  _registerProfileStore.saveUser(
+                    args!['uid'],
+                    nameController.text,
+                  );
+                  Navigator.popAndPushNamed(context, '/');
+                },
                 text: 'Continue',
                 width: 207,
               ),
               SizedBox(height: 9),
               SecondaryButton(
-                ontap: () {},
+                ontap: () {
+                  _registerProfileStore.clearUser(args!['uid']);
+                  Navigator.popAndPushNamed(context, '/login');
+                },
                 text: 'back',
                 width: 207,
               )

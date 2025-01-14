@@ -94,9 +94,13 @@ class LoginPage extends StatelessWidget {
                             );
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               if (_loginStore.user != null) {
+                                print("User: ${_loginStore.user}");
                                 if (_loginStore.isProfileSetupRequired) {
                                   Navigator.pushReplacementNamed(
-                                      context, '/register-profile');
+                                    context,
+                                    '/register-profile',
+                                    arguments: {'user': _loginStore.user},
+                                  );
                                 } else {
                                   Navigator.pushReplacementNamed(context, '/');
                                 }

@@ -1,4 +1,5 @@
 import 'package:loomi_player/data/models/user_model.dart';
+import 'package:loomi_player/domain/usecases/get_user_usecase.dart';
 import 'package:loomi_player/domain/usecases/save_user_usecase.dart';
 import 'package:mobx/mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -12,6 +13,7 @@ class LoginStore = _LoginStoreBase with _$LoginStore;
 abstract class _LoginStoreBase with Store {
   final AuthService _authService = GetIt.I<AuthService>();
   final SaveUserUseCase _saveUserUseCase = GetIt.I<SaveUserUseCase>();
+  final GetUserUseCase _getUserUseCase = GetIt.I<GetUserUseCase>();
 
   @observable
   User? user;
@@ -32,10 +34,6 @@ abstract class _LoginStoreBase with Store {
       user = await _authService.signInWithGoogle();
       errorMessage = null;
 
-      if (user != null && user!.displayName == null) {
-        isProfileSetupRequired = true;
-      }
-
       if (user != null) {
         final userModel = UserModel(
           uid: user!.uid,
@@ -44,7 +42,11 @@ abstract class _LoginStoreBase with Store {
           photoUrl: user!.photoURL,
         );
 
-        await _saveUserUseCase(userModel);
+        final userLocal = _getUserUseCase(userModel.uid);
+
+        if (userLocal == null) {
+          await _saveUserUseCase(userModel);
+        }
       }
     } catch (e) {
       print("Erro ao fazer login: $e");
@@ -61,8 +63,20 @@ abstract class _LoginStoreBase with Store {
       user = await _authService.signInWithEmailPassword(email, password);
       errorMessage = null;
 
-      if (user != null && user!.displayName == null) {
-        isProfileSetupRequired = true;
+      if (user != null) {
+        final userModel = UserModel(
+          uid: user!.uid,
+          email: user!.email ?? '',
+          name: user!.displayName ?? '',
+          photoUrl: user!.photoURL ?? '',
+        );
+
+        final userLocal = _getUserUseCase(userModel.uid);
+
+        if (userLocal == null) {
+          isProfileSetupRequired = true;
+          await _saveUserUseCase(userModel);
+        }
       }
     } catch (e) {
       print("Erro ao fazer login com email/senha: $e");

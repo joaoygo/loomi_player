@@ -7,21 +7,21 @@ class UserRepository {
 
   UserRepository(this._sharedPreferences);
 
-  static const String _userKey = 'user';
+  static const String _userKey = 'user-';
 
   Future<void> saveUser(UserModel user) async {
     final userJson = jsonEncode(user.toJson());
-    await _sharedPreferences.setString(_userKey, userJson);
+    await _sharedPreferences.setString(_userKey + user.uid, userJson);
   }
 
-  UserModel? getUser() {
-    final userJson = _sharedPreferences.getString(_userKey);
+  UserModel? getUser(String uid) {
+    final userJson = _sharedPreferences.getString(_userKey + uid);
     if (userJson == null) return null;
 
     return UserModel.fromJson(jsonDecode(userJson));
   }
 
-  Future<void> clearUser() async {
-    await _sharedPreferences.remove(_userKey);
+  Future<void> clearUser(String uid) async {
+    await _sharedPreferences.remove(_userKey + uid);
   }
 }

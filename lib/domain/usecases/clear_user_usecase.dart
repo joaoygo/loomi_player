@@ -5,7 +5,7 @@ class ClearUserUseCase {
 
   ClearUserUseCase(this._userRepository);
 
-  Future<void> call() async {
-    await _userRepository.clearUser();
+  Future<void> call(String uid) async {
+    await _userRepository.clearUser(uid);
   }
 }
