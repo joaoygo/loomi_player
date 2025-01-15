@@ -30,6 +30,7 @@ lib/
 ├── domain/
 │   ├── entities/       # Entidades de negócio
 │   ├── usecases/       # Lógica de negócio (casos de uso)
+|   ├── repository/     # Interfaces para acesso a dados.
 ├── presentation/
 │   ├── pages/          # Telas e componentes de UI
 │   ├── widgets/        # Widgets reutilizáveis

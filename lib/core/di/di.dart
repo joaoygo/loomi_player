@@ -1,8 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loomi_player/core/services/auth_service.dart';
 import 'package:loomi_player/data/repositories/user_repository.dart';
+import 'package:loomi_player/data/repositories/video_repository_impl.dart';
+import 'package:loomi_player/data/sources/video_api.dart';
+import 'package:loomi_player/domain/repositories/video_repository.dart';
 import 'package:loomi_player/domain/usecases/clear_user_usecase.dart';
 import 'package:loomi_player/domain/usecases/get_user_usecase.dart';
+import 'package:loomi_player/domain/usecases/get_videos_usecase.dart';
 import 'package:loomi_player/domain/usecases/save_user_usecase.dart';
 import 'package:loomi_player/presentation/stores/forgot_password_store.dart';
 import 'package:loomi_player/presentation/stores/login_store.dart';
@@ -14,27 +19,44 @@ final getIt = GetIt.instance;
 
 Future<void> setupDI() async {
   final sharedPreferences = await SharedPreferences.getInstance();
+  final dio = Dio();
 
-  getIt.registerSingleton<UserRepository>(
-    UserRepository(sharedPreferences),
+  // API
+
+  getIt.registerLazySingleton<VideoApi>(() => VideoApi(dio));
+
+  // Repository
+
+  getIt.registerLazySingleton<VideoRepository>(
+    () => VideoRepositoryImpl(api: getIt<VideoApi>()),
   );
 
-  getIt.registerSingleton<AuthService>(AuthService());
-
-  getIt.registerSingleton<SaveUserUseCase>(
-    SaveUserUseCase(getIt<UserRepository>()),
+  getIt.registerLazySingleton<UserRepository>(
+    () => UserRepository(sharedPreferences),
   );
 
-  getIt.registerSingleton<GetUserUseCase>(
-    GetUserUseCase(getIt<UserRepository>()),
+  // Auth
+  getIt.registerLazySingleton<AuthService>(() => AuthService());
+
+  // Use Cases
+  getIt.registerLazySingleton<SaveUserUseCase>(
+    () => SaveUserUseCase(getIt<UserRepository>()),
+  );
+  getIt.registerLazySingleton<GetUserUseCase>(
+    () => GetUserUseCase(getIt<UserRepository>()),
+  );
+  getIt.registerLazySingleton<ClearUserUseCase>(
+    () => ClearUserUseCase(getIt<UserRepository>()),
+  );
+  getIt.registerLazySingleton<GetVideosUseCase>(
+    () => GetVideosUseCase(getIt<VideoRepository>()),
   );
 
-  getIt.registerSingleton<ClearUserUseCase>(
-    ClearUserUseCase(getIt<UserRepository>()),
-  );
+  // Stores
 
-  getIt.registerSingleton<LoginStore>(LoginStore());
-  getIt.registerSingleton<ForgotPasswordStore>(ForgotPasswordStore());
-  getIt.registerSingleton<RegisterStore>(RegisterStore());
-  getIt.registerSingleton<RegisterProfileStore>(RegisterProfileStore());
+  getIt.registerLazySingleton<LoginStore>(() => LoginStore());
+  getIt.registerLazySingleton<ForgotPasswordStore>(() => ForgotPasswordStore());
+  getIt.registerLazySingleton<RegisterStore>(() => RegisterStore());
+  getIt.registerLazySingleton<RegisterProfileStore>(
+      () => RegisterProfileStore());
 }

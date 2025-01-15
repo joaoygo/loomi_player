@@ -27,8 +27,6 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
       setState(() {
         _image = compressedImage;
       });
-
-      // Passar a imagem para o callback
       widget.onImagePicked(compressedImage);
     }
   }
@@ -47,7 +45,6 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Exibir o bottom sheet ao clicar na imagem
         showModalBottomSheet(
           context: context,
           builder: (_) => Padding(
