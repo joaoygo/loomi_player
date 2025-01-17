@@ -5,4 +5,6 @@ class AssetsConstants {
   static const String logoWithText = 'assets/svgs/logoWithText.svg';
   static const String iconRate = 'assets/svgs/icon-rate.svg';
   static const String iconShare = 'assets/svgs/icon-shared.svg';
+  static const String cameraIcon = 'assets/svgs/camera-icon.svg';
+  static const String galeryIcon = 'assets/svgs/galery-icon.svg';
 }
