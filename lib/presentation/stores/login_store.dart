@@ -1,7 +1,7 @@
 import 'package:loomi_player/data/models/user_model.dart';
-import 'package:loomi_player/domain/usecases/get_user_usecase.dart';
+import 'package:loomi_player/domain/usecases/get_user_firestore_usecase.dart';
 import 'package:loomi_player/domain/usecases/save_user_firestore_usecase.dart.dart';
-import 'package:loomi_player/domain/usecases/save_user_usecase.dart';
+import 'package:loomi_player/domain/usecases/save_user_id_shared_preferences_usecase.dart';
 import 'package:mobx/mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,10 +13,12 @@ class LoginStore = _LoginStoreBase with _$LoginStore;
 
 abstract class _LoginStoreBase with Store {
   final AuthService _authService = GetIt.I<AuthService>();
-  final SaveUserUseCase _saveUserUseCase = GetIt.I<SaveUserUseCase>();
-  final GetUserUseCase _getUserUseCase = GetIt.I<GetUserUseCase>();
+  final SaveUserIdSharedPreferencesUseCase _saveUserIdSharedPreferencesUseCase =
+      GetIt.I<SaveUserIdSharedPreferencesUseCase>();
   final SaveUserFirestoreUseCase _saveUserFirestoreUseCase =
       GetIt.I<SaveUserFirestoreUseCase>();
+  final GetUserFirestoreUseCase _getUserFirestoreUseCase =
+      GetIt.I<GetUserFirestoreUseCase>();
 
   @observable
   User? user;
@@ -45,11 +47,10 @@ abstract class _LoginStoreBase with Store {
           photoUrl: user!.photoURL,
         );
 
-        final userLocal = await _getUserUseCase();
+        final activeAccount = await _getUserFirestoreUseCase(userModel.email);
 
-        if (userLocal == null) {
-          await _saveUserUseCase(userModel);
-          await _saveUserFirestoreUseCase(userModel.uid, userModel.toJson());
+        if (activeAccount == null) {
+          await _saveUserFirestoreUseCase(userModel.email, userModel.toJson());
         }
       }
     } catch (e) {
@@ -74,11 +75,12 @@ abstract class _LoginStoreBase with Store {
           photoUrl: user!.photoURL ?? '',
         );
 
-        final userLocal = await _getUserUseCase();
+        final activeAccount = await _getUserFirestoreUseCase(userModel.email);
 
-        if (userLocal == null) {
+        if (activeAccount == null) {
           isProfileSetupRequired = true;
-          await _saveUserUseCase(userModel);
+          await _saveUserIdSharedPreferencesUseCase(userModel);
+          await _saveUserFirestoreUseCase(userModel.email, userModel.toJson());
         }
       }
     } catch (e) {

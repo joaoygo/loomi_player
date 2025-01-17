@@ -23,11 +23,6 @@ class LoginPage extends StatelessWidget {
       backgroundColor: AppColors.backgroundColor,
       body: Observer(
         builder: (_) {
-          if (_loginStore.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
           return SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -85,31 +80,35 @@ class LoginPage extends StatelessWidget {
                         height: _loginStore.errorMessage != null ? 40 : 51),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: PrimaryButton(
-                        ontap: () async {
-                          if (!_loginStore.isLoading) {
-                            await _loginStore.loginWithEmailPassword(
-                              emailController.text,
-                              passwordController.text,
-                            );
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              if (_loginStore.user != null) {
-                                if (_loginStore.isProfileSetupRequired) {
-                                  Navigator.pushReplacementNamed(
-                                    context,
-                                    '/register-profile',
-                                    arguments: {'user': _loginStore.user},
+                      child: _loginStore.isLoading
+                          ? const CircularProgressIndicator()
+                          : PrimaryButton(
+                              ontap: () async {
+                                if (!_loginStore.isLoading) {
+                                  await _loginStore.loginWithEmailPassword(
+                                    emailController.text,
+                                    passwordController.text,
                                   );
-                                } else {
-                                  Navigator.pushReplacementNamed(context, '/');
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    if (_loginStore.user != null) {
+                                      if (_loginStore.isProfileSetupRequired) {
+                                        Navigator.pushReplacementNamed(
+                                          context,
+                                          '/register-profile',
+                                          arguments: {'user': _loginStore.user},
+                                        );
+                                      } else {
+                                        Navigator.pushReplacementNamed(
+                                            context, '/');
+                                      }
+                                    }
+                                  });
                                 }
-                              }
-                            });
-                          }
-                        },
-                        text: "Login",
-                        width: 207,
-                      ),
+                              },
+                              text: "Login",
+                              width: 207,
+                            ),
                     ),
                     const SizedBox(height: 46),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -130,16 +129,18 @@ class LoginPage extends StatelessWidget {
                       ),
                     ]),
                     const SizedBox(height: 28),
-                    CustomGoogleButton(
-                      onPressed: () async {
-                        await _loginStore.loginWithGoogle();
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (_loginStore.user != null) {
-                            Navigator.pushReplacementNamed(context, '/');
-                          }
-                        });
-                      },
-                    ),
+                    _loginStore.isLoading
+                        ? const CircularProgressIndicator()
+                        : CustomGoogleButton(
+                            onPressed: () async {
+                              await _loginStore.loginWithGoogle();
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (_loginStore.user != null) {
+                                  Navigator.pushReplacementNamed(context, '/');
+                                }
+                              });
+                            },
+                          ),
                     SizedBox(height: 20),
                     TextWithLink(
                       text: "Don't have an account? ",
