@@ -24,8 +24,6 @@ class RegisterProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Observer(builder: (_) {
@@ -34,7 +32,7 @@ class RegisterProfilePage extends StatelessWidget {
                 child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               HeaderCredentials(
                   title: 'Tell us more!',
                   subtitle: 'Complete your profile',
@@ -54,12 +52,14 @@ class RegisterProfilePage extends StatelessWidget {
               SizedBox(height: 64),
               PrimaryButton(
                 ontap: () async {
-                  final uid = await _registerProfileStore.getUser();
+                  final String uid = await _registerProfileStore.getUser();
                   _registerProfileStore.saveUser(
                     uid,
                     nameController.text,
                   );
-                  Navigator.popAndPushNamed(context, '/');
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.popAndPushNamed(context, '/');
+                  });
                 },
                 text: 'Continue',
                 width: 207,
