@@ -47,12 +47,14 @@ class AuthService {
     }
   }
 
-  Future<void> createUser(String email, String password) async {
+  Future<User?> createUser(String email, String password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      final newUser = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      return newUser.user;
     } catch (e) {
       throw Exception("Error creating user: $e");
     }
