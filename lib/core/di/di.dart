@@ -10,10 +10,10 @@ import 'package:loomi_player/domain/repositories/video_repository.dart';
 import 'package:loomi_player/domain/usecases/clear_user_usecase.dart';
 import 'package:loomi_player/domain/usecases/delete_user_firestore_usecase.dart';
 import 'package:loomi_player/domain/usecases/get_user_firestore_usecase.dart';
-import 'package:loomi_player/domain/usecases/get_user_usecase.dart';
+import 'package:loomi_player/domain/usecases/get_user_id_shared_preferences_usecase.dart';
 import 'package:loomi_player/domain/usecases/get_videos_usecase.dart';
 import 'package:loomi_player/domain/usecases/save_user_firestore_usecase.dart.dart';
-import 'package:loomi_player/domain/usecases/save_user_usecase.dart';
+import 'package:loomi_player/domain/usecases/save_user_id_shared_preferences_usecase.dart';
 import 'package:loomi_player/presentation/stores/forgot_password_store.dart';
 import 'package:loomi_player/presentation/stores/home_store.dart';
 import 'package:loomi_player/presentation/stores/login_store.dart';
@@ -47,14 +47,14 @@ Future<void> setupDI() async {
   );
 
   // Use Cases
-  getIt.registerLazySingleton<SaveUserUseCase>(
-    () => SaveUserUseCase(getIt<UserRepository>()),
+  getIt.registerLazySingleton<SaveUserIdSharedPreferencesUseCase>(
+    () => SaveUserIdSharedPreferencesUseCase(getIt<UserRepository>()),
   );
-  getIt.registerLazySingleton<GetUserUseCase>(
-    () => GetUserUseCase(getIt<UserRepository>()),
+  getIt.registerLazySingleton<GetUserIdSharedPreferencesUseCase>(
+    () => GetUserIdSharedPreferencesUseCase(getIt<UserRepository>()),
   );
-  getIt.registerLazySingleton<ClearUserUseCase>(
-    () => ClearUserUseCase(getIt<UserRepository>()),
+  getIt.registerLazySingleton<ClearUserIdSharedPreferencesUseCase>(
+    () => ClearUserIdSharedPreferencesUseCase(getIt<UserRepository>()),
   );
   getIt.registerLazySingleton<GetVideosUseCase>(
     () => GetVideosUseCase(getIt<VideoRepository>()),

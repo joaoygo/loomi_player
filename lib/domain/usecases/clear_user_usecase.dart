@@ -1,9 +1,9 @@
 import '../../data/repositories/user_repository.dart';
 
-class ClearUserUseCase {
+class ClearUserIdSharedPreferencesUseCase {
   final UserRepository _userRepository;
 
-  ClearUserUseCase(this._userRepository);
+  ClearUserIdSharedPreferencesUseCase(this._userRepository);
 
   Future<void> call() async {
     await _userRepository.clearUser();

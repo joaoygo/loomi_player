@@ -1,9 +1,9 @@
 import '../../data/repositories/user_repository.dart';
 
-class GetUserUseCase {
+class GetUserIdSharedPreferencesUseCase {
   final UserRepository _userRepository;
 
-  GetUserUseCase(this._userRepository);
+  GetUserIdSharedPreferencesUseCase(this._userRepository);
 
   Future<String?> call() {
     return _userRepository.getUser();
