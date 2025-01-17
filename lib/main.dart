@@ -1,12 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loomi_player/core/di/di.dart';
+import 'package:loomi_player/domain/entities/video_entity.dart';
 import 'package:loomi_player/presentation/pages/forgot_password_page.dart';
 import 'package:loomi_player/presentation/pages/home_page.dart';
 import 'package:loomi_player/presentation/pages/instruction_send_page.dart';
 import 'package:loomi_player/presentation/pages/login_page.dart';
 import 'package:loomi_player/presentation/pages/register_page.dart';
 import 'package:loomi_player/presentation/pages/register_profile_page.dart';
+import 'package:loomi_player/presentation/pages/view_detail_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +32,11 @@ class MyApp extends StatelessWidget {
         '/register-profile': (context) => RegisterProfilePage(),
         '/forgot-password': (context) => ForgotPasswordPage(),
         '/instruction-send': (context) => InstructionSendPage(),
+        '/video-detail': (context) {
+          final VideoEntity video =
+              ModalRoute.of(context)!.settings.arguments as VideoEntity;
+          return VideoDetailPage(video: video);
+        },
         '/': (context) => HomePage(),
       },
     );
