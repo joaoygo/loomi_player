@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:logger/logger.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
+  var logger = Logger();
   Future<User?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -21,7 +22,7 @@ class AuthService {
       final userCredential = await _auth.signInWithCredential(credential);
       return userCredential.user;
     } catch (e) {
-      print("Erro no login com Google: $e");
+      logger.d("Erro no login com Google: $e");
       return null;
     }
   }
@@ -32,7 +33,7 @@ class AuthService {
           email: email, password: password);
       return userCredential.user;
     } catch (e) {
-      print("Erro no login com email/senha: $e");
+      logger.d("Erro no login com email/senha: $e");
       return null;
     }
   }
@@ -41,8 +42,8 @@ class AuthService {
     try {
       await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {
-      print("Erro ao enviar e-mail de redefinição: $e");
-      throw e;
+      logger.d("Erro ao enviar e-mail de redefinição: $e");
+      rethrow;
     }
   }
 

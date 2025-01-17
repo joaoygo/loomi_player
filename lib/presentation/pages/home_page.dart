@@ -1,155 +1,56 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:loomi_player/presentation/widgets/app_bar_custom.dart';
+import 'package:loomi_player/presentation/widgets/video_card_widget.dart';
+import 'package:loomi_player/presentation/stores/home_store.dart';
+import 'package:get_it/get_it.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class HomePage extends StatelessWidget {
-  final User? user = FirebaseAuth.instance.currentUser;
+  final HomeStore store = GetIt.I<HomeStore>();
 
   HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 168, 131, 173),
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.add_shopping_cart, size: 100),
-                SizedBox(height: 25),
-                //Hello Again!
-                Text(
-                  "Wassup!",
-                  //style: GoogleFonts.bebasNeue(fontSize: 60),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  "Welcome Back ^_^",
-                  style: TextStyle(fontSize: 25),
-                ),
-                SizedBox(height: 50),
-                //Email textfield
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: TextField(
-                          //controller: _emailController,
-                          decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        hintText: 'Email Address',
-                        border: InputBorder.none,
-                      )),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                //Password textfield
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: TextField(
-                          //controller: _passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            hintText: 'Password',
-                            border: InputBorder.none,
-                          )),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5),
+      backgroundColor: const Color.fromARGB(255, 234, 233, 233),
+      appBar: AppBarCustom(
+        title: 'title',
+        nameUser: 'joaoygo',
+      ),
+      body: Observer(
+        builder: (_) {
+          if (store.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return Text('data');
-                                //ForgotPasswordPage();
-                              },
-                            ),
-                          );
-                        },
-                        child: Text('Forgot Password? ',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  ),
-                ),
+          if (store.videos.isEmpty) {
+            return const Center(
+              child: Text(
+                'Nenhum vídeo disponível.',
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+            );
+          }
 
-                SizedBox(height: 12),
-                //Sign In button
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: GestureDetector(
-                    onTap: () {},
-                    //signIn,
-                    child: Container(
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Center(
-                          child: Text(
-                        'LogIn',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
-                      )),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                //Not a member? Join now
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Not a member?'),
-                    GestureDetector(
-                      onTap: () {},
-                      //widget.showRegisterPage,
-                      child: Text(
-                        ' Register now',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
+          return PageView.builder(
+            itemCount: store.videos.length,
+            itemBuilder: (context, index) {
+              final video = store.videos[index];
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: VideoCardWidget(video: video),
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          store.fetchVideos();
+        },
+        backgroundColor: Colors.deepPurple,
+        child: const Icon(Icons.refresh),
       ),
     );
   }

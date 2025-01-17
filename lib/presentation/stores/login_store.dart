@@ -53,7 +53,6 @@ abstract class _LoginStoreBase with Store {
         }
       }
     } catch (e) {
-      print("Erro ao fazer login: $e");
       errorMessage = 'Erro ao fazer login com Google';
     } finally {
       isLoading = false;
@@ -83,7 +82,6 @@ abstract class _LoginStoreBase with Store {
         }
       }
     } catch (e) {
-      print("Erro ao fazer login com email/senha: $e");
       errorMessage = 'Email ou senha incorretos';
     } finally {
       isLoading = false;

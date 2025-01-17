@@ -1,3 +1,4 @@
+import 'package:logger/logger.dart';
 import 'package:loomi_player/domain/usecases/save_user_firestore_usecase.dart.dart';
 import 'package:mobx/mobx.dart';
 import '../../domain/usecases/get_user_firestore_usecase.dart';
@@ -12,7 +13,7 @@ abstract class _ProfileStore with Store {
   final SaveUserFirestoreUseCase _saveUserFirestoreUseCase;
   final GetUserFirestoreUseCase _getUserFirestoreUseCase;
   final DeleteUserFirestoreUseCase _deleteUserFirestoreUseCase;
-
+  var logger = Logger();
   _ProfileStore(
     this._saveUserFirestoreUseCase,
     this._getUserFirestoreUseCase,
@@ -37,7 +38,7 @@ abstract class _ProfileStore with Store {
       errorMessage = null;
     } catch (e) {
       errorMessage = 'Erro ao salvar usuário';
-      print("Erro ao salvar usuário: $e");
+      logger.d("Erro ao salvar usuário: $e");
     } finally {
       isLoading = false;
     }
@@ -57,7 +58,7 @@ abstract class _ProfileStore with Store {
       errorMessage = null;
     } catch (e) {
       errorMessage = 'Erro ao obter usuário';
-      print("Erro ao obter usuário: $e");
+      logger.d("Erro ao obter usuário: $e");
     } finally {
       isLoading = false;
     }
@@ -72,7 +73,7 @@ abstract class _ProfileStore with Store {
       errorMessage = null;
     } catch (e) {
       errorMessage = 'Erro ao deletar usuário';
-      print("Erro ao deletar usuário: $e");
+      logger.d("Erro ao deletar usuário: $e");
     } finally {
       isLoading = false;
     }
