@@ -46,7 +46,6 @@ dependencies:
   json_annotation: ^4.9.0
   image_picker: ^1.1.2
   flutter_image_compress: ^2.4.0
-  permission_handler: ^11.3.1HEAD
   dio: ^5.7.0
   logger: ^2.5.0
   dartz: ^0.10.1
@@ -54,6 +53,7 @@ dependencies:
   intl: ^0.20.1
   share_plus: ^10.1.4
   cloud_firestore: ^5.6.1
+  permission_handler: ^11.3.1
 
 dev_dependencies:
   flutter_test:
