@@ -8,9 +8,10 @@ class FirestoreService {
 
   Future<void> saveUser(String uid, Map<String, dynamic> userData) async {
     try {
+      logger.d("Salvando dados do usuário no Firestore: $uid $userData");
       await usersCollection.doc(uid).set(userData, SetOptions(merge: true));
     } catch (e) {
-      logger.d("Erro ao salvar usuário no Firestore: $e");
+      logger.w("Erro ao salvar usuário no Firestore: $e");
       throw Exception("Erro ao salvar dados no Firestore");
     }
   }
