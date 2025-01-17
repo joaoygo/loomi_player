@@ -1,7 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:loomi_player/data/models/user_model.dart';
 import 'package:loomi_player/domain/usecases/clear_user_usecase.dart';
-import 'package:loomi_player/domain/usecases/save_user_usecase.dart';
+import 'package:loomi_player/domain/usecases/get_user_usecase.dart';
+import 'package:loomi_player/domain/usecases/save_user_firestore_usecase.dart.dart';
 import 'package:mobx/mobx.dart';
 
 part 'register_profile_store.g.dart';
@@ -9,8 +10,10 @@ part 'register_profile_store.g.dart';
 class RegisterProfileStore = _RegisterProfileStore with _$RegisterProfileStore;
 
 abstract class _RegisterProfileStore with Store {
-  final SaveUserUseCase _saveUserUseCase = GetIt.I<SaveUserUseCase>();
+  final GetUserUseCase _getUserUseCase = GetIt.I<GetUserUseCase>();
   final ClearUserUseCase _clearUserUseCase = GetIt.I<ClearUserUseCase>();
+  final SaveUserFirestoreUseCase _saveUserFirestoreUseCase =
+      GetIt.I<SaveUserFirestoreUseCase>();
 
   @observable
   String userName = '';
@@ -29,6 +32,12 @@ abstract class _RegisterProfileStore with Store {
   }
 
   @action
+  Future<String> getUser() async {
+    final user = await _getUserUseCase.call();
+    return user ?? '';
+  }
+
+  @action
   Future<void> saveUser(String uid, String email) async {
     final userModel = UserModel(
       uid: uid,
@@ -36,11 +45,11 @@ abstract class _RegisterProfileStore with Store {
       name: userName,
       photoUrl: profileImage,
     );
-    await _saveUserUseCase(userModel);
+    await _saveUserFirestoreUseCase(uid, userModel.toJson());
   }
 
   @action
-  Future<void> clearUser(String uid) async {
-    _clearUserUseCase(uid);
+  Future<void> clearUser() async {
+    _clearUserUseCase();
   }
 }

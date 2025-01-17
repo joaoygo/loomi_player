@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_model.dart';
 
@@ -7,21 +6,20 @@ class UserRepository {
 
   UserRepository(this._sharedPreferences);
 
-  static const String _userKey = 'user-';
+  static const String _userKey = 'user-uid';
 
   Future<void> saveUser(UserModel user) async {
-    final userJson = jsonEncode(user.toJson());
-    await _sharedPreferences.setString(_userKey + user.uid, userJson);
+    await _sharedPreferences.setString(_userKey, user.uid);
   }
 
-  UserModel? getUser(String uid) {
-    final userJson = _sharedPreferences.getString(_userKey + uid);
-    if (userJson == null) return null;
+  Future<String?> getUser() async {
+    final user = _sharedPreferences.getString(_userKey);
+    if (user == null) return null;
 
-    return UserModel.fromJson(jsonDecode(userJson));
+    return user;
   }
 
-  Future<void> clearUser(String uid) async {
-    await _sharedPreferences.remove(_userKey + uid);
+  Future<void> clearUser() async {
+    await _sharedPreferences.remove(_userKey);
   }
 }

@@ -41,6 +41,14 @@ mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
     });
   }
 
+  late final _$getUserAsyncAction =
+      AsyncAction('_RegisterProfileStore.getUser', context: context);
+
+  @override
+  Future<String> getUser() {
+    return _$getUserAsyncAction.run(() => super.getUser());
+  }
+
   late final _$saveUserAsyncAction =
       AsyncAction('_RegisterProfileStore.saveUser', context: context);
 
@@ -53,8 +61,8 @@ mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
       AsyncAction('_RegisterProfileStore.clearUser', context: context);
 
   @override
-  Future<void> clearUser(String uid) {
-    return _$clearUserAsyncAction.run(() => super.clearUser(uid));
+  Future<void> clearUser() {
+    return _$clearUserAsyncAction.run(() => super.clearUser());
   }
 
   late final _$_RegisterProfileStoreActionController =

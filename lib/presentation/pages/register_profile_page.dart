@@ -53,9 +53,10 @@ class RegisterProfilePage extends StatelessWidget {
               ),
               SizedBox(height: 64),
               PrimaryButton(
-                ontap: () {
+                ontap: () async {
+                  final uid = await _registerProfileStore.getUser();
                   _registerProfileStore.saveUser(
-                    args!['uid'],
+                    uid,
                     nameController.text,
                   );
                   Navigator.popAndPushNamed(context, '/');
@@ -66,7 +67,7 @@ class RegisterProfilePage extends StatelessWidget {
               SizedBox(height: 9),
               SecondaryButton(
                 ontap: () {
-                  _registerProfileStore.clearUser(args!['uid']);
+                  _registerProfileStore.clearUser();
                   Navigator.popAndPushNamed(context, '/login');
                 },
                 text: 'back',
