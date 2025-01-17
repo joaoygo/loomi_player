@@ -53,8 +53,8 @@ mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
       AsyncAction('_RegisterProfileStore.clearUser', context: context);
 
   @override
-  Future<void> clearUser(String uid) {
-    return _$clearUserAsyncAction.run(() => super.clearUser(uid));
+  Future<void> clearUser() {
+    return _$clearUserAsyncAction.run(() => super.clearUser());
   }
 
   late final _$_RegisterProfileStoreActionController =

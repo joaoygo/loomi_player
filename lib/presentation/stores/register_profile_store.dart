@@ -40,7 +40,7 @@ abstract class _RegisterProfileStore with Store {
   }
 
   @action
-  Future<void> clearUser(String uid) async {
-    _clearUserUseCase(uid);
+  Future<void> clearUser() async {
+    _clearUserUseCase();
   }
 }

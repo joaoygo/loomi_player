@@ -66,7 +66,7 @@ class RegisterProfilePage extends StatelessWidget {
               SizedBox(height: 9),
               SecondaryButton(
                 ontap: () {
-                  _registerProfileStore.clearUser(args!['uid']);
+                  _registerProfileStore.clearUser();
                   Navigator.popAndPushNamed(context, '/login');
                 },
                 text: 'back',
