@@ -41,6 +41,14 @@ mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
     });
   }
 
+  late final _$getUserAsyncAction =
+      AsyncAction('_RegisterProfileStore.getUser', context: context);
+
+  @override
+  Future<String> getUser() {
+    return _$getUserAsyncAction.run(() => super.getUser());
+  }
+
   late final _$saveUserAsyncAction =
       AsyncAction('_RegisterProfileStore.saveUser', context: context);
 

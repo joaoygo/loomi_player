@@ -24,6 +24,9 @@ Future<void> setupDI() async {
   getIt.registerLazySingleton<UserRepository>(
     () => UserRepository(sharedPreferences),
   );
+  getIt.registerLazySingleton<FirestoreUserRepositoryImpl>(
+    () => FirestoreUserRepositoryImpl(getIt<FirestoreService>()),
+  );
 
   // Auth
   getIt.registerLazySingleton<AuthService>(() => AuthService());
