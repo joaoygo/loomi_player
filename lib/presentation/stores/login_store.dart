@@ -1,5 +1,6 @@
 import 'package:loomi_player/data/models/user_model.dart';
 import 'package:loomi_player/domain/usecases/get_user_usecase.dart';
+import 'package:loomi_player/domain/usecases/save_user_firestore_usecase.dart.dart';
 import 'package:loomi_player/domain/usecases/save_user_usecase.dart';
 import 'package:mobx/mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -14,6 +15,8 @@ abstract class _LoginStoreBase with Store {
   final AuthService _authService = GetIt.I<AuthService>();
   final SaveUserUseCase _saveUserUseCase = GetIt.I<SaveUserUseCase>();
   final GetUserUseCase _getUserUseCase = GetIt.I<GetUserUseCase>();
+  final SaveUserFirestoreUseCase _saveUserFirestoreUseCase =
+      GetIt.I<SaveUserFirestoreUseCase>();
 
   @observable
   User? user;
@@ -46,6 +49,7 @@ abstract class _LoginStoreBase with Store {
 
         if (userLocal == null) {
           await _saveUserUseCase(userModel);
+          await _saveUserFirestoreUseCase(userModel.uid, userModel.toJson());
         }
       }
     } catch (e) {
