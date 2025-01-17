@@ -36,7 +36,7 @@ class _VideoApi implements VideoApi {
     )
         .compose(
           _dio.options,
-          '/videos',
+          '/movies',
           queryParameters: queryParameters,
           data: _data,
         )

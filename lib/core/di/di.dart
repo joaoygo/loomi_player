@@ -10,6 +10,7 @@ import 'package:loomi_player/domain/usecases/get_user_usecase.dart';
 import 'package:loomi_player/domain/usecases/get_videos_usecase.dart';
 import 'package:loomi_player/domain/usecases/save_user_usecase.dart';
 import 'package:loomi_player/presentation/stores/forgot_password_store.dart';
+import 'package:loomi_player/presentation/stores/home_store.dart';
 import 'package:loomi_player/presentation/stores/login_store.dart';
 import 'package:loomi_player/presentation/stores/register_profile_store.dart';
 import 'package:loomi_player/presentation/stores/register_store.dart';
@@ -59,4 +60,7 @@ Future<void> setupDI() async {
   getIt.registerLazySingleton<RegisterStore>(() => RegisterStore());
   getIt.registerLazySingleton<RegisterProfileStore>(
       () => RegisterProfileStore());
+  getIt.registerLazySingleton<HomeStore>(
+    () => HomeStore(getVideosUseCase: getIt<GetVideosUseCase>()),
+  );
 }

@@ -9,7 +9,7 @@ part 'video_api.g.dart';
 abstract class VideoApi {
   factory VideoApi(Dio dio, {String baseUrl}) = _VideoApi;
 
-  @GET("/videos")
+  @GET("/movies")
   Future<ApiResponse<List<VideoModel>>> getVideos();
 
   @POST("/videos/{id}/like")

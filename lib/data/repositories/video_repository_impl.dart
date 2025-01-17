@@ -1,4 +1,3 @@
-import 'package:loomi_player/data/models/video_model.dart';
 import 'package:loomi_player/domain/entities/video_entity.dart';
 import 'package:loomi_player/domain/repositories/video_repository.dart';
 
@@ -13,26 +12,26 @@ class VideoRepositoryImpl implements VideoRepository {
   Future<List<VideoEntity>> getVideos() async {
     final response = await api.getVideos();
 
-    final List<VideoModel> videoList = (response.data as List)
-        .map((json) => VideoModel.fromJson(json as Map<String, dynamic>))
-        .toList();
+    if (response.data.isNotEmpty) {
+      final videos = response.data
+          .map((videoModel) => VideoEntity(
+                id: videoModel.id,
+                name: videoModel.attributes.name,
+                synopsis: videoModel.attributes.synopsis,
+                currentlyPlaying: videoModel.attributes.currentlyPlaying,
+                streamLink: videoModel.attributes.streamLink,
+                genre: videoModel.attributes.genre,
+                createdAt: DateTime.parse(videoModel.attributes.createdAt),
+                updatedAt: DateTime.parse(videoModel.attributes.updatedAt),
+                publishedAt: DateTime.parse(videoModel.attributes.publishedAt),
+                endDate: DateTime.parse(videoModel.attributes.endDate),
+              ))
+          .toList();
 
-    return videoList.map((VideoModel model) {
-      final attributes = model.attributes;
-
-      return VideoEntity(
-        id: model.id,
-        name: attributes.name,
-        synopsis: attributes.synopsis,
-        currentlyPlaying: attributes.currentlyPlaying,
-        streamLink: attributes.streamLink,
-        genre: attributes.genre,
-        createdAt: DateTime.parse(attributes.createdAt),
-        updatedAt: DateTime.parse(attributes.updatedAt),
-        publishedAt: DateTime.parse(attributes.publishedAt),
-        endDate: DateTime.parse(attributes.endDate),
-      );
-    }).toList();
+      return videos;
+    } else {
+      throw Exception('A resposta da API não contém dados.');
+    }
   }
 
   @override

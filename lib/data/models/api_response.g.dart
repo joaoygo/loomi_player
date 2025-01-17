@@ -11,7 +11,7 @@ ApiResponse<T> _$ApiResponseFromJson<T>(
   T Function(Object? json) fromJsonT,
 ) =>
     ApiResponse<T>(
-      data: (json['data'] as List<dynamic>).map(fromJsonT).toList(),
+      data: fromJsonT(json['data']),
       meta: Meta.fromJson(json['meta'] as Map<String, dynamic>),
     );
 
@@ -20,7 +20,7 @@ Map<String, dynamic> _$ApiResponseToJson<T>(
   Object? Function(T value) toJsonT,
 ) =>
     <String, dynamic>{
-      'data': instance.data.map(toJsonT).toList(),
+      'data': toJsonT(instance.data),
       'meta': instance.meta,
     };
 

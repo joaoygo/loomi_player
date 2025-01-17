@@ -4,21 +4,16 @@ part 'api_response.g.dart';
 
 @JsonSerializable(genericArgumentFactories: true)
 class ApiResponse<T> {
-  final List<T> data;
+  final T data;
   final Meta meta;
 
-  ApiResponse({
-    required this.data,
-    required this.meta,
-  });
+  ApiResponse({required this.data, required this.meta});
 
   factory ApiResponse.fromJson(
-    Map<String, dynamic> json,
-    T Function(Object? json) fromJsonT,
-  ) =>
+          Map<String, dynamic> json, T Function(Object?) fromJsonT) =>
       _$ApiResponseFromJson(json, fromJsonT);
 
-  Map<String, dynamic> toJson(Object Function(T value) toJsonT) =>
+  Map<String, dynamic> toJson(Object Function(T) toJsonT) =>
       _$ApiResponseToJson(this, toJsonT);
 }
 
@@ -29,6 +24,7 @@ class Meta {
   Meta({required this.pagination});
 
   factory Meta.fromJson(Map<String, dynamic> json) => _$MetaFromJson(json);
+
   Map<String, dynamic> toJson() => _$MetaToJson(this);
 }
 
