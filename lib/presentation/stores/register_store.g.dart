@@ -45,7 +45,7 @@ mixin _$RegisterStore on _RegisterStoreBase, Store {
       AsyncAction('_RegisterStoreBase.register', context: context);
 
   @override
-  Future<void> register(String email, String password) {
+  Future<UserModel?> register(String email, String password) {
     return _$registerAsyncAction.run(() => super.register(email, password));
   }
 

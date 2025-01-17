@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 import 'package:loomi_player/core/constants/app_colors.dart';
 import 'package:loomi_player/core/constants/assets_constants.dart';
 import 'package:loomi_player/core/utils/validators.dart';
-import 'package:loomi_player/presentation/pages/register_profile_page.dart';
 import 'package:loomi_player/presentation/stores/register_store.dart';
 import 'package:loomi_player/presentation/widgets/custom_google_button.dart';
 import 'package:loomi_player/presentation/widgets/header_credentials.dart';
@@ -132,29 +131,25 @@ class RegisterPage extends StatelessWidget {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
                                   if (_registerStore.errorMessage != null) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: const Text("Error"),
-                                        content:
-                                            Text(_registerStore.errorMessage!),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: const Text("OK"),
-                                          ),
-                                        ],
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Error creating account"),
+                                        backgroundColor: Colors.red,
+                                        duration: Duration(seconds: 3),
                                       ),
                                     );
                                   } else {
-                                    Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              RegisterProfilePage()),
-                                      (route) => false,
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            "Account created successfully"),
+                                        backgroundColor: Colors.green,
+                                        duration: Duration(seconds: 3),
+                                      ),
                                     );
+
+                                    Navigator.restorablePopAndPushNamed(
+                                        context, '/login');
                                   }
                                 });
                               },
