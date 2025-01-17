@@ -42,7 +42,7 @@ abstract class _LoginStoreBase with Store {
           photoUrl: user!.photoURL,
         );
 
-        final userLocal = _getUserUseCase(userModel.uid);
+        final userLocal = await _getUserUseCase();
 
         if (userLocal == null) {
           await _saveUserUseCase(userModel);
@@ -71,7 +71,7 @@ abstract class _LoginStoreBase with Store {
           photoUrl: user!.photoURL ?? '',
         );
 
-        final userLocal = _getUserUseCase(userModel.uid);
+        final userLocal = await _getUserUseCase();
 
         if (userLocal == null) {
           isProfileSetupRequired = true;
