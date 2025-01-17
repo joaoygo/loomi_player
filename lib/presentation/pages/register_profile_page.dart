@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 import 'package:loomi_player/core/constants/app_colors.dart';
 import 'package:loomi_player/core/constants/assets_constants.dart';
+import 'package:loomi_player/data/models/user_model.dart';
+import 'package:loomi_player/domain/usecases/save_user_firestore_usecase.dart.dart';
 import 'package:loomi_player/presentation/stores/register_profile_store.dart';
 import 'package:loomi_player/presentation/widgets/header_credentials.dart';
 import 'package:loomi_player/presentation/widgets/primary_button.dart';
@@ -14,6 +17,8 @@ import 'package:loomi_player/presentation/widgets/secondary_button.dart';
 class RegisterProfilePage extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final RegisterProfileStore _registerProfileStore = RegisterProfileStore();
+  final SaveUserFirestoreUseCase _saveUserFirestoreUseCase =
+      GetIt.I<SaveUserFirestoreUseCase>();
 
   RegisterProfilePage({super.key});
 
@@ -40,7 +45,35 @@ class RegisterProfilePage extends StatelessWidget {
                   spaceBetweenLogo: 57,
                   spaceBetweenText: 11),
               SizedBox(height: 64),
-              ProfileImagePicker(onImagePicked: onImagePicked),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ProfileImagePicker(onImagePicked: onImagePicked),
+                  SizedBox(width: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Choose Image',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          )),
+                      SizedBox(height: 5),
+                      SizedBox(
+                          width: 91,
+                          child: Text(
+                            'A square .jpg, .gif, or .png image 200x200 or larger',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w400),
+                          )),
+                    ],
+                  ),
+                ],
+              ),
               SizedBox(height: 64),
               Padding(
                 padding: const EdgeInsets.all(15.0),
@@ -57,6 +90,17 @@ class RegisterProfilePage extends StatelessWidget {
                     uid,
                     nameController.text,
                   );
+
+                  final UserModel userModel = UserModel(
+                    uid: uid,
+                    email: uid,
+                    name: nameController.text,
+                    photoUrl: _registerProfileStore.profileImage,
+                  );
+
+                  await _saveUserFirestoreUseCase(
+                      userModel.email, userModel.toJson());
+
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.popAndPushNamed(context, '/');
                   });
