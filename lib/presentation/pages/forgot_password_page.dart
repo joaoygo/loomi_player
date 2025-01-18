@@ -8,12 +8,17 @@ import 'package:loomi_player/presentation/widgets/primary_button.dart';
 import 'package:loomi_player/presentation/widgets/primary_input_text.dart';
 import 'package:loomi_player/presentation/widgets/secondary_button.dart';
 
-class ForgotPasswordPage extends StatelessWidget {
+class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
+
+  @override
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
+}
+
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final TextEditingController emailController = TextEditingController();
   final ForgotPasswordStore _forgotPasswordStore =
       GetIt.I<ForgotPasswordStore>();
-
-  ForgotPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -85,5 +90,11 @@ class ForgotPasswordPage extends StatelessWidget {
                 ]))),
           );
         }));
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
   }
 }

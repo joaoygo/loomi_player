@@ -1,12 +1,13 @@
+import 'package:loomi_player/domain/repositories/shared_preferences_repository.dart';
+
 import '../../data/models/user_model.dart';
-import '../../data/repositories/user_repository.dart';
 
 class SaveUserIdSharedPreferencesUseCase {
-  final UserRepository _userRepository;
+  final SharedPreferencesRepository _sharedPreferencesRepository;
 
-  SaveUserIdSharedPreferencesUseCase(this._userRepository);
+  SaveUserIdSharedPreferencesUseCase(this._sharedPreferencesRepository);
 
   Future<void> call(UserModel user) async {
-    await _userRepository.saveUser(user);
+    await _sharedPreferencesRepository.saveUserIdSharedPreferences(user.email);
   }
 }

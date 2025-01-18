@@ -13,7 +13,7 @@ class FirestoreUserRepositoryImpl implements FirestoreUserRepository {
 
   @override
   Future<Map<String, dynamic>?> getUserFromFirestore(String uid) {
-    return _firestoreService.getUser(uid);
+    return _firestoreService.getUserFirestore(uid);
   }
 
   @override

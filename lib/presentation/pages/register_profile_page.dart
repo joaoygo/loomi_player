@@ -2,11 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get_it/get_it.dart';
 import 'package:loomi_player/core/constants/app_colors.dart';
 import 'package:loomi_player/core/constants/assets_constants.dart';
-import 'package:loomi_player/data/models/user_model.dart';
-import 'package:loomi_player/domain/usecases/save_user_firestore_usecase.dart.dart';
 import 'package:loomi_player/presentation/stores/register_profile_store.dart';
 import 'package:loomi_player/presentation/widgets/header_credentials.dart';
 import 'package:loomi_player/presentation/widgets/primary_button.dart';
@@ -14,13 +11,17 @@ import 'package:loomi_player/presentation/widgets/primary_input_text.dart';
 import 'package:loomi_player/presentation/widgets/profile_image_picker.dart';
 import 'package:loomi_player/presentation/widgets/secondary_button.dart';
 
-class RegisterProfilePage extends StatelessWidget {
-  final TextEditingController nameController = TextEditingController();
-  final RegisterProfileStore _registerProfileStore = RegisterProfileStore();
-  final SaveUserFirestoreUseCase _saveUserFirestoreUseCase =
-      GetIt.I<SaveUserFirestoreUseCase>();
+class RegisterProfilePage extends StatefulWidget {
+  const RegisterProfilePage({super.key});
 
-  RegisterProfilePage({super.key});
+  @override
+  State<RegisterProfilePage> createState() => _RegisterProfilePageState();
+}
+
+class _RegisterProfilePageState extends State<RegisterProfilePage> {
+  final TextEditingController nameController = TextEditingController();
+
+  final RegisterProfileStore _registerProfileStore = RegisterProfileStore();
 
   void onImagePicked(File imageFile) {
     final imagePath = imageFile.path;
@@ -83,31 +84,22 @@ class RegisterProfilePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 64),
-              PrimaryButton(
-                ontap: () async {
-                  final String uid = await _registerProfileStore.getUser();
-                  _registerProfileStore.saveUser(
-                    uid,
-                    nameController.text,
-                  );
+              _registerProfileStore.isLoading
+                  ? CircularProgressIndicator()
+                  : PrimaryButton(
+                      ontap: () async {
+                        final String uid =
+                            await _registerProfileStore.getUser();
+                        _registerProfileStore.setUserName(nameController.text);
+                        await _registerProfileStore.saveUser(uid);
 
-                  final UserModel userModel = UserModel(
-                    uid: uid,
-                    email: uid,
-                    name: nameController.text,
-                    photoUrl: _registerProfileStore.profileImage,
-                  );
-
-                  await _saveUserFirestoreUseCase(
-                      userModel.email, userModel.toJson());
-
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.popAndPushNamed(context, '/');
-                  });
-                },
-                text: 'Continue',
-                width: 207,
-              ),
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Navigator.popAndPushNamed(context, '/');
+                        });
+                      },
+                      text: 'Continue',
+                      width: 207,
+                    ),
               SizedBox(height: 9),
               SecondaryButton(
                 ontap: () {
@@ -122,5 +114,11 @@ class RegisterProfilePage extends StatelessWidget {
         )));
       }),
     );
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
   }
 }

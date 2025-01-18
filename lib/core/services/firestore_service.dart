@@ -16,9 +16,11 @@ class FirestoreService {
     }
   }
 
-  Future<Map<String, dynamic>?> getUser(String uid) async {
+  Future<Map<String, dynamic>?> getUserFirestore(String uid) async {
     try {
+      logger.f("Buscando dados do usuário no Firestore: $uid");
       final snapshot = await usersCollection.doc(uid).get();
+      logger.f("Dados do usuário no Firestore: ${snapshot.data()}");
       return snapshot.exists ? snapshot.data() as Map<String, dynamic>? : null;
     } catch (e) {
       logger.d("Erro ao buscar usuário no Firestore: $e");

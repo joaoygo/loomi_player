@@ -26,7 +26,7 @@ lib/
 ├── data/
 │   ├── models/         # Modelos de dados com json_serializable
 │   ├── repositories/   # Repositórios para lógica de dados (API, local)
-│   └── sources/        # Fontes de dados: API (Dio) e Local (SharedPreferences)
+│   └── sources/        # Fontes de dados: API (Dio)
 ├── domain/
 │   ├── entities/       # Entidades de negócio
 │   ├── usecases/       # Lógica de negócio (casos de uso)

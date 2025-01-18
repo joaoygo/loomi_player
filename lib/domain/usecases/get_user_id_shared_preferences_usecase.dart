@@ -1,11 +1,10 @@
-import '../../data/repositories/user_repository.dart';
+import 'package:loomi_player/domain/repositories/shared_preferences_repository.dart';
 
 class GetUserIdSharedPreferencesUseCase {
-  final UserRepository _userRepository;
+  final SharedPreferencesRepository _sharedPreferencesRepository;
+  GetUserIdSharedPreferencesUseCase(this._sharedPreferencesRepository);
 
-  GetUserIdSharedPreferencesUseCase(this._userRepository);
-
-  Future<String?> call() {
-    return _userRepository.getUser();
+  Future<String?> call() async {
+    return await _sharedPreferencesRepository.getUserIdSharedPreferences();
   }
 }

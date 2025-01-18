@@ -58,6 +58,8 @@ abstract class _LoginStoreBase with Store {
         if (activeAccount == null) {
           await _saveUserFirestoreUseCase(userModel.email, userModel.toJson());
         }
+
+        await _saveUserIdSharedPreferencesUseCase(userModel);
       }
     } catch (e) {
       errorMessage = 'Erro ao fazer login com Google';
@@ -83,11 +85,15 @@ abstract class _LoginStoreBase with Store {
 
         final activeAccount = await _getUserFirestoreUseCase(userModel.email);
 
+        if (activeAccount?['name'] == '') {
+          isProfileSetupRequired = true;
+        }
+
         if (activeAccount == null) {
           isProfileSetupRequired = true;
-          await _saveUserIdSharedPreferencesUseCase(userModel);
           await _saveUserFirestoreUseCase(userModel.email, userModel.toJson());
         }
+        await _saveUserIdSharedPreferencesUseCase(userModel);
       }
     } catch (e) {
       errorMessage = 'Email ou senha incorretos';

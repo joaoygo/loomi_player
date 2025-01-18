@@ -13,14 +13,22 @@ import 'package:loomi_player/presentation/widgets/primary_button.dart';
 import 'package:loomi_player/presentation/widgets/primary_input_text.dart';
 import 'package:loomi_player/presentation/widgets/text_with_link.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
   final TextEditingController confirmPasswordController =
       TextEditingController();
-  final RegisterStore _registerStore = GetIt.I<RegisterStore>();
 
-  RegisterPage({super.key});
+  final RegisterStore _registerStore = GetIt.I<RegisterStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -188,5 +196,13 @@ class RegisterPage extends StatelessWidget {
         );
       }),
     );
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
   }
 }

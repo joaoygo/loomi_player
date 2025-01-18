@@ -24,6 +24,9 @@ abstract class _RegisterProfileStore with Store {
   @observable
   String profileImage = '';
 
+  @observable
+  bool isLoading = false;
+
   @action
   void setUserName(String name) {
     userName = name;
@@ -36,23 +39,29 @@ abstract class _RegisterProfileStore with Store {
 
   @action
   Future<String> getUser() async {
+    isLoading = true;
     final user = await _getUserIdSharedPreferencesUseCase.call();
+    isLoading = false;
     return user ?? '';
   }
 
   @action
-  Future<void> saveUser(String uid, String email) async {
+  Future<void> saveUser(String uid) async {
+    isLoading = true;
     final userModel = UserModel(
       uid: uid,
-      email: email,
+      email: uid,
       name: userName,
       photoUrl: profileImage,
     );
     await _saveUserFirestoreUseCase(uid, userModel.toJson());
+    isLoading = false;
   }
 
   @action
   Future<void> clearUser() async {
+    isLoading = true;
     _clearUserIdSharedPreferencesUseCase();
+    isLoading = false;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:loomi_player/core/utils/validators.dart';
 import 'package:loomi_player/core/constants/app_colors.dart';
 import 'package:loomi_player/core/constants/assets_constants.dart';
 import 'package:loomi_player/presentation/widgets/header_credentials.dart';
@@ -10,12 +11,19 @@ import '../stores/login_store.dart';
 import 'package:get_it/get_it.dart';
 import '../widgets/custom_google_button.dart';
 
-class LoginPage extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final LoginStore _loginStore = GetIt.I<LoginStore>();
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
-  LoginPage({super.key});
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController emailController = TextEditingController();
+
+  final TextEditingController passwordController = TextEditingController();
+
+  final LoginStore _loginStore = GetIt.I<LoginStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -68,22 +76,37 @@ class LoginPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (_loginStore.errorMessage != null)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          _loginStore.errorMessage!,
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                      ),
-                    SizedBox(
-                        height: _loginStore.errorMessage != null ? 40 : 51),
+                    SizedBox(height: 40),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: _loginStore.isLoading
                           ? const CircularProgressIndicator()
                           : PrimaryButton(
                               ontap: () async {
+                                final email = emailController.text.trim();
+                                final password = passwordController.text.trim();
+
+                                if (!isValidEmail(email)) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text("Invalid email"),
+                                        backgroundColor: Colors.red,
+                                        duration: Duration(seconds: 3)),
+                                  );
+                                  return;
+                                }
+
+                                if (!isValidPassword(password)) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "Password must be at least 6 characters"),
+                                        backgroundColor: Colors.red,
+                                        duration: Duration(seconds: 3)),
+                                  );
+                                  return;
+                                }
+
                                 if (!_loginStore.isLoading) {
                                   await _loginStore.loginWithEmailPassword(
                                     emailController.text,
@@ -102,6 +125,14 @@ class LoginPage extends StatelessWidget {
                                         Navigator.pushReplacementNamed(
                                             context, '/');
                                       }
+                                    }
+                                    if (_loginStore.user == null) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text("Incorrect credentials"),
+                                        backgroundColor: Colors.red,
+                                        duration: const Duration(seconds: 3),
+                                      ));
                                     }
                                   });
                                 }
@@ -155,5 +186,12 @@ class LoginPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }

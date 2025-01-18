@@ -1,8 +1,8 @@
-import 'package:logger/logger.dart';
 import 'package:loomi_player/data/models/user_model.dart';
 import 'package:loomi_player/domain/usecases/get_user_firestore_usecase.dart';
 import 'package:loomi_player/domain/usecases/login_with_google_usecase.dart';
 import 'package:loomi_player/domain/usecases/register_with_username_password_usecase.dart';
+import 'package:loomi_player/domain/usecases/save_user_id_shared_preferences_usecase.dart';
 import 'package:mobx/mobx.dart';
 import 'package:get_it/get_it.dart';
 
@@ -18,7 +18,8 @@ abstract class _RegisterStoreBase with Store {
   final RegisterWithUsernamePasswordUseCase
       _registerWithUsernamePasswordUseCase =
       GetIt.I<RegisterWithUsernamePasswordUseCase>();
-  var logger = Logger();
+  final SaveUserIdSharedPreferencesUseCase _saveUserIdSharedPreferencesUseCase =
+      GetIt.I<SaveUserIdSharedPreferencesUseCase>();
   @observable
   bool isLoading = false;
 
@@ -45,6 +46,7 @@ abstract class _RegisterStoreBase with Store {
         errorMessage = 'Usuário já cadastrado';
         return null;
       }
+      await _saveUserIdSharedPreferencesUseCase(userModel);
       return userModel;
     } catch (e) {
       errorMessage = e.toString();
@@ -69,7 +71,6 @@ abstract class _RegisterStoreBase with Store {
 
       final newUser =
           await _registerWithUsernamePasswordUseCase(email, password);
-      logger.d("User created: $newUser");
       final userModel = UserModel(
         uid: newUser!.uid,
         email: newUser.email ?? '',

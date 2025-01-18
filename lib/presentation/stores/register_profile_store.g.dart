@@ -41,6 +41,22 @@ mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
     });
   }
 
+  late final _$isLoadingAtom =
+      Atom(name: '_RegisterProfileStore.isLoading', context: context);
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
   late final _$getUserAsyncAction =
       AsyncAction('_RegisterProfileStore.getUser', context: context);
 
@@ -53,8 +69,8 @@ mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
       AsyncAction('_RegisterProfileStore.saveUser', context: context);
 
   @override
-  Future<void> saveUser(String uid, String email) {
-    return _$saveUserAsyncAction.run(() => super.saveUser(uid, email));
+  Future<void> saveUser(String uid) {
+    return _$saveUserAsyncAction.run(() => super.saveUser(uid));
   }
 
   late final _$clearUserAsyncAction =
@@ -94,7 +110,8 @@ mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
   String toString() {
     return '''
 userName: ${userName},
-profileImage: ${profileImage}
+profileImage: ${profileImage},
+isLoading: ${isLoading}
     ''';
   }
 }

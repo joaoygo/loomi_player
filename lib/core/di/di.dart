@@ -2,9 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loomi_player/core/services/auth_service.dart';
 import 'package:loomi_player/core/services/firestore_service.dart';
+import 'package:loomi_player/core/services/shared_preferences_services.dart';
 import 'package:loomi_player/data/repositories/auth_repository_impl.dart';
 import 'package:loomi_player/data/repositories/firestore_user_repository_impl.dart';
-import 'package:loomi_player/data/repositories/user_repository.dart';
+import 'package:loomi_player/data/repositories/shared_preferences_repository_impl.dart';
 import 'package:loomi_player/data/repositories/video_repository_impl.dart';
 import 'package:loomi_player/data/sources/video_api.dart';
 import 'package:loomi_player/domain/repositories/video_repository.dart';
@@ -35,6 +36,9 @@ Future<void> setupDI() async {
   final dio = Dio();
 
   // Services
+  getIt.registerSingleton<SharedPreferencesService>(
+    SharedPreferencesService(sharedPreferences),
+  );
   getIt.registerLazySingleton<AuthService>(() => AuthService());
   getIt.registerLazySingleton<FirestoreService>(() => FirestoreService());
 
@@ -45,8 +49,8 @@ Future<void> setupDI() async {
   getIt.registerLazySingleton<VideoRepository>(
     () => VideoRepositoryImpl(api: getIt<VideoApi>()),
   );
-  getIt.registerLazySingleton<UserRepository>(
-    () => UserRepository(sharedPreferences),
+  getIt.registerLazySingleton<SharedPreferencesRepositoryImpl>(
+    () => SharedPreferencesRepositoryImpl(getIt<SharedPreferencesService>()),
   );
   getIt.registerLazySingleton<FirestoreUserRepositoryImpl>(
     () => FirestoreUserRepositoryImpl(getIt<FirestoreService>()),
@@ -57,13 +61,16 @@ Future<void> setupDI() async {
 
   // Use Cases
   getIt.registerLazySingleton<SaveUserIdSharedPreferencesUseCase>(
-    () => SaveUserIdSharedPreferencesUseCase(getIt<UserRepository>()),
+    () => SaveUserIdSharedPreferencesUseCase(
+        getIt<SharedPreferencesRepositoryImpl>()),
   );
   getIt.registerLazySingleton<GetUserIdSharedPreferencesUseCase>(
-    () => GetUserIdSharedPreferencesUseCase(getIt<UserRepository>()),
+    () => GetUserIdSharedPreferencesUseCase(
+        getIt<SharedPreferencesRepositoryImpl>()),
   );
   getIt.registerLazySingleton<ClearUserIdSharedPreferencesUseCase>(
-    () => ClearUserIdSharedPreferencesUseCase(getIt<UserRepository>()),
+    () => ClearUserIdSharedPreferencesUseCase(
+        getIt<SharedPreferencesRepositoryImpl>()),
   );
   getIt.registerLazySingleton<GetVideosUseCase>(
     () => GetVideosUseCase(getIt<VideoRepository>()),
