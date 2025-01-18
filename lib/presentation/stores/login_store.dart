@@ -1,22 +1,30 @@
 import 'package:loomi_player/data/models/user_model.dart';
-import 'package:loomi_player/domain/usecases/get_user_usecase.dart';
+import 'package:loomi_player/domain/usecases/get_user_firestore_usecase.dart';
+import 'package:loomi_player/domain/usecases/login_with_email_password_usecase.dart';
+import 'package:loomi_player/domain/usecases/login_with_google_usecase.dart';
+import 'package:loomi_player/domain/usecases/logout_usecase.dart';
 import 'package:loomi_player/domain/usecases/save_user_firestore_usecase.dart.dart';
-import 'package:loomi_player/domain/usecases/save_user_usecase.dart';
+import 'package:loomi_player/domain/usecases/save_user_id_shared_preferences_usecase.dart';
 import 'package:mobx/mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../core/services/auth_service.dart';
 
 part 'login_store.g.dart';
 
 class LoginStore = _LoginStoreBase with _$LoginStore;
 
 abstract class _LoginStoreBase with Store {
-  final AuthService _authService = GetIt.I<AuthService>();
-  final SaveUserUseCase _saveUserUseCase = GetIt.I<SaveUserUseCase>();
-  final GetUserUseCase _getUserUseCase = GetIt.I<GetUserUseCase>();
+  final SaveUserIdSharedPreferencesUseCase _saveUserIdSharedPreferencesUseCase =
+      GetIt.I<SaveUserIdSharedPreferencesUseCase>();
   final SaveUserFirestoreUseCase _saveUserFirestoreUseCase =
       GetIt.I<SaveUserFirestoreUseCase>();
+  final GetUserFirestoreUseCase _getUserFirestoreUseCase =
+      GetIt.I<GetUserFirestoreUseCase>();
+  final LoginWithGoogleUseCase _loginWithGoogleUseCase =
+      GetIt.I<LoginWithGoogleUseCase>();
+  final LoginWithEmailPasswordUseCase _loginWithEmailPasswordUseCase =
+      GetIt.I<LoginWithEmailPasswordUseCase>();
+  final LogoutUseCase _logoutUseCase = GetIt.I<LogoutUseCase>();
 
   @observable
   User? user;
@@ -34,7 +42,7 @@ abstract class _LoginStoreBase with Store {
   Future<void> loginWithGoogle() async {
     isLoading = true;
     try {
-      user = await _authService.signInWithGoogle();
+      user = await _loginWithGoogleUseCase();
       errorMessage = null;
 
       if (user != null) {
@@ -45,12 +53,13 @@ abstract class _LoginStoreBase with Store {
           photoUrl: user!.photoURL,
         );
 
-        final userLocal = await _getUserUseCase();
+        final activeAccount = await _getUserFirestoreUseCase(userModel.email);
 
-        if (userLocal == null) {
-          await _saveUserUseCase(userModel);
-          await _saveUserFirestoreUseCase(userModel.uid, userModel.toJson());
+        if (activeAccount == null) {
+          await _saveUserFirestoreUseCase(userModel.email, userModel.toJson());
         }
+
+        await _saveUserIdSharedPreferencesUseCase(userModel);
       }
     } catch (e) {
       errorMessage = 'Erro ao fazer login com Google';
@@ -63,7 +72,7 @@ abstract class _LoginStoreBase with Store {
   Future<void> loginWithEmailPassword(String email, String password) async {
     isLoading = true;
     try {
-      user = await _authService.signInWithEmailPassword(email, password);
+      user = await _loginWithEmailPasswordUseCase(email, password);
       errorMessage = null;
 
       if (user != null) {
@@ -74,12 +83,17 @@ abstract class _LoginStoreBase with Store {
           photoUrl: user!.photoURL ?? '',
         );
 
-        final userLocal = await _getUserUseCase();
+        final activeAccount = await _getUserFirestoreUseCase(userModel.email);
 
-        if (userLocal == null) {
+        if (activeAccount?['name'] == '') {
           isProfileSetupRequired = true;
-          await _saveUserUseCase(userModel);
         }
+
+        if (activeAccount == null) {
+          isProfileSetupRequired = true;
+          await _saveUserFirestoreUseCase(userModel.email, userModel.toJson());
+        }
+        await _saveUserIdSharedPreferencesUseCase(userModel);
       }
     } catch (e) {
       errorMessage = 'Email ou senha incorretos';
@@ -90,7 +104,7 @@ abstract class _LoginStoreBase with Store {
 
   @action
   Future<void> logout() async {
-    await _authService.signOut();
+    await _logoutUseCase();
     user = null;
     errorMessage = null;
   }

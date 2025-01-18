@@ -10,12 +10,12 @@ class FirestoreService {
     try {
       await usersCollection.doc(uid).set(userData, SetOptions(merge: true));
     } catch (e) {
-      logger.d("Erro ao salvar usuário no Firestore: $e");
+      logger.w("Erro ao salvar usuário no Firestore: $e");
       throw Exception("Erro ao salvar dados no Firestore");
     }
   }
 
-  Future<Map<String, dynamic>?> getUser(String uid) async {
+  Future<Map<String, dynamic>?> getUserFirestore(String uid) async {
     try {
       final snapshot = await usersCollection.doc(uid).get();
       return snapshot.exists ? snapshot.data() as Map<String, dynamic>? : null;

@@ -41,11 +41,20 @@ mixin _$RegisterStore on _RegisterStoreBase, Store {
     });
   }
 
+  late final _$registerWithGoogleAsyncAction =
+      AsyncAction('_RegisterStoreBase.registerWithGoogle', context: context);
+
+  @override
+  Future<UserModel?> registerWithGoogle() {
+    return _$registerWithGoogleAsyncAction
+        .run(() => super.registerWithGoogle());
+  }
+
   late final _$registerAsyncAction =
       AsyncAction('_RegisterStoreBase.register', context: context);
 
   @override
-  Future<void> register(String email, String password) {
+  Future<UserModel?> register(String email, String password) {
     return _$registerAsyncAction.run(() => super.register(email, password));
   }
 

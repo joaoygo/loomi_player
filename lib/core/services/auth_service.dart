@@ -6,6 +6,11 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   var logger = Logger();
+
+  AuthService() {
+    _auth.setLanguageCode('pt-BR');
+  }
+
   Future<User?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -47,12 +52,14 @@ class AuthService {
     }
   }
 
-  Future<void> createUser(String email, String password) async {
+  Future<User?> createUser(String email, String password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      final newUser = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      return newUser.user;
     } catch (e) {
       throw Exception("Error creating user: $e");
     }

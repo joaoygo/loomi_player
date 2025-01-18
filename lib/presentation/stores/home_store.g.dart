@@ -57,6 +57,21 @@ mixin _$HomeStore on _HomeStoreBase, Store {
     });
   }
 
+  late final _$userAtom = Atom(name: '_HomeStoreBase.user', context: context);
+
+  @override
+  UserModel? get user {
+    _$userAtom.reportRead();
+    return super.user;
+  }
+
+  @override
+  set user(UserModel? value) {
+    _$userAtom.reportWrite(value, super.user, () {
+      super.user = value;
+    });
+  }
+
   late final _$fetchVideosAsyncAction =
       AsyncAction('_HomeStoreBase.fetchVideos', context: context);
 
@@ -65,12 +80,21 @@ mixin _$HomeStore on _HomeStoreBase, Store {
     return _$fetchVideosAsyncAction.run(() => super.fetchVideos());
   }
 
+  late final _$getUserAsyncAction =
+      AsyncAction('_HomeStoreBase.getUser', context: context);
+
+  @override
+  Future<UserModel?> getUser() {
+    return _$getUserAsyncAction.run(() => super.getUser());
+  }
+
   @override
   String toString() {
     return '''
 videos: ${videos},
 isLoading: ${isLoading},
-errorMessage: ${errorMessage}
+errorMessage: ${errorMessage},
+user: ${user}
     ''';
   }
 }

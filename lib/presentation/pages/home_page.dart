@@ -5,10 +5,21 @@ import 'package:loomi_player/presentation/stores/home_store.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-class HomePage extends StatelessWidget {
-  final HomeStore store = GetIt.I<HomeStore>();
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
-  HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final HomeStore _store = GetIt.I<HomeStore>();
+
+  @override
+  void initState() {
+    super.initState();
+    _store.getUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +27,15 @@ class HomePage extends StatelessWidget {
       backgroundColor: const Color.fromARGB(255, 234, 233, 233),
       appBar: AppBarCustom(
         title: 'title',
-        nameUser: 'joaoygo',
+        nameUser: _store.user?.name,
       ),
       body: Observer(
         builder: (_) {
-          if (store.isLoading) {
+          if (_store.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (store.videos.isEmpty) {
+          if (_store.videos.isEmpty) {
             return const Center(
               child: Text(
                 'Nenhum vídeo disponível.',
@@ -34,9 +45,9 @@ class HomePage extends StatelessWidget {
           }
 
           return PageView.builder(
-            itemCount: store.videos.length,
+            itemCount: _store.videos.length,
             itemBuilder: (context, index) {
-              final video = store.videos[index];
+              final video = _store.videos[index];
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: VideoCardWidget(video: video),
@@ -47,7 +58,7 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          store.fetchVideos();
+          _store.fetchVideos();
         },
         backgroundColor: Colors.deepPurple,
         child: const Icon(Icons.refresh),

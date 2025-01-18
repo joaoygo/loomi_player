@@ -1,11 +1,11 @@
-import '../../data/repositories/user_repository.dart';
+import 'package:loomi_player/domain/repositories/shared_preferences_repository.dart';
 
-class ClearUserUseCase {
-  final UserRepository _userRepository;
+class ClearUserIdSharedPreferencesUseCase {
+  final SharedPreferencesRepository _sharedPreferencesRepository;
 
-  ClearUserUseCase(this._userRepository);
+  ClearUserIdSharedPreferencesUseCase(this._sharedPreferencesRepository);
 
   Future<void> call() async {
-    await _userRepository.clearUser();
+    await _sharedPreferencesRepository.clearUserIdSharedPreferences();
   }
 }

@@ -6,6 +6,7 @@ import 'package:loomi_player/presentation/pages/forgot_password_page.dart';
 import 'package:loomi_player/presentation/pages/home_page.dart';
 import 'package:loomi_player/presentation/pages/instruction_send_page.dart';
 import 'package:loomi_player/presentation/pages/login_page.dart';
+import 'package:loomi_player/presentation/pages/profile_page.dart';
 import 'package:loomi_player/presentation/pages/register_page.dart';
 import 'package:loomi_player/presentation/pages/register_profile_page.dart';
 import 'package:loomi_player/presentation/pages/view_detail_page.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
               ModalRoute.of(context)!.settings.arguments as VideoEntity;
           return VideoDetailPage(video: video);
         },
+        '/profile': (context) => ProfilePage(),
         '/': (context) => HomePage(),
       },
     );
