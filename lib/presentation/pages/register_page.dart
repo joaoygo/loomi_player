@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loomi_player/core/constants/app_colors.dart';
+import 'package:loomi_player/core/constants/app_strings.dart';
 import 'package:loomi_player/core/constants/assets_constants.dart';
 import 'package:loomi_player/core/utils/validators.dart';
 import 'package:loomi_player/presentation/stores/register_store.dart';
@@ -32,6 +33,7 @@ class RegisterPage extends StatelessWidget {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const SizedBox(height: 20),
                     SvgPicture.asset(
                       AssetsConstants.logoWithText,
                     ),
@@ -48,7 +50,24 @@ class RegisterPage extends StatelessWidget {
                           'To get started, please complete your account registration.',
                     ),
                     SizedBox(height: 20),
-                    CustomGoogleButton(onPressed: () {}),
+                    CustomGoogleButton(onPressed: () async {
+                      final registerSuccess =
+                          await _registerStore.registerWithGoogle();
+
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (registerSuccess != null) {
+                          Navigator.pushNamed(context, '/');
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(_registerStore.errorMessage ??
+                                  AppStrings.errorGeneric),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      });
+                    }),
                     const SizedBox(height: 41),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       Expanded(
@@ -90,7 +109,8 @@ class RegisterPage extends StatelessWidget {
                         )),
                     const SizedBox(height: 23),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 23),
                       child: _registerStore.isLoading
                           ? const CircularProgressIndicator()
                           : PrimaryButton(
@@ -103,8 +123,9 @@ class RegisterPage extends StatelessWidget {
                                 if (password != confirmPassword) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                        content:
-                                            Text("Passwords do not match")),
+                                        content: Text("Passwords do not match"),
+                                        backgroundColor: Colors.red,
+                                        duration: Duration(seconds: 3)),
                                   );
                                   return;
                                 }
@@ -112,7 +133,9 @@ class RegisterPage extends StatelessWidget {
                                 if (!isValidEmail(email)) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                        content: Text("Invalid email")),
+                                        content: Text("Invalid email"),
+                                        backgroundColor: Colors.red,
+                                        duration: Duration(seconds: 3)),
                                   );
                                   return;
                                 }
@@ -121,7 +144,9 @@ class RegisterPage extends StatelessWidget {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text(
-                                            "Password must be at least 6 characters")),
+                                            "Password must be at least 6 characters"),
+                                        backgroundColor: Colors.red,
+                                        duration: Duration(seconds: 3)),
                                   );
                                   return;
                                 }

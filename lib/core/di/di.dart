@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loomi_player/core/services/auth_service.dart';
 import 'package:loomi_player/core/services/firestore_service.dart';
+import 'package:loomi_player/data/repositories/auth_repository_impl.dart';
 import 'package:loomi_player/data/repositories/firestore_user_repository_impl.dart';
 import 'package:loomi_player/data/repositories/user_repository.dart';
 import 'package:loomi_player/data/repositories/video_repository_impl.dart';
@@ -12,6 +13,11 @@ import 'package:loomi_player/domain/usecases/delete_user_firestore_usecase.dart'
 import 'package:loomi_player/domain/usecases/get_user_firestore_usecase.dart';
 import 'package:loomi_player/domain/usecases/get_user_id_shared_preferences_usecase.dart';
 import 'package:loomi_player/domain/usecases/get_videos_usecase.dart';
+import 'package:loomi_player/domain/usecases/login_with_email_password_usecase.dart';
+import 'package:loomi_player/domain/usecases/login_with_google_usecase.dart';
+import 'package:loomi_player/domain/usecases/logout_usecase.dart';
+import 'package:loomi_player/domain/usecases/register_with_username_password_usecase.dart';
+import 'package:loomi_player/domain/usecases/reset_password_usecase.dart';
 import 'package:loomi_player/domain/usecases/save_user_firestore_usecase.dart.dart';
 import 'package:loomi_player/domain/usecases/save_user_id_shared_preferences_usecase.dart';
 import 'package:loomi_player/presentation/stores/forgot_password_store.dart';
@@ -45,6 +51,9 @@ Future<void> setupDI() async {
   getIt.registerLazySingleton<FirestoreUserRepositoryImpl>(
     () => FirestoreUserRepositoryImpl(getIt<FirestoreService>()),
   );
+  getIt.registerLazySingleton<AuthRepositoryImpl>(
+    () => AuthRepositoryImpl(getIt<AuthService>()),
+  );
 
   // Use Cases
   getIt.registerLazySingleton<SaveUserIdSharedPreferencesUseCase>(
@@ -68,6 +77,20 @@ Future<void> setupDI() async {
   getIt.registerLazySingleton<DeleteUserFirestoreUseCase>(
     () => DeleteUserFirestoreUseCase(getIt<FirestoreUserRepositoryImpl>()),
   );
+  getIt.registerLazySingleton<LoginWithGoogleUseCase>(
+    () => LoginWithGoogleUseCase(getIt<AuthRepositoryImpl>()),
+  );
+  getIt.registerLazySingleton<RegisterWithUsernamePasswordUseCase>(
+    () => RegisterWithUsernamePasswordUseCase(getIt<AuthRepositoryImpl>()),
+  );
+  getIt.registerLazySingleton<LogoutUseCase>(
+      () => LogoutUseCase(getIt<AuthRepositoryImpl>()));
+
+  getIt.registerLazySingleton<LoginWithEmailPasswordUseCase>(
+      () => LoginWithEmailPasswordUseCase(getIt<AuthRepositoryImpl>()));
+
+  getIt.registerLazySingleton<ResetPasswordUsecase>(
+      () => ResetPasswordUsecase(getIt<AuthRepositoryImpl>()));
 
   // Stores
   getIt.registerLazySingleton<LoginStore>(() => LoginStore());

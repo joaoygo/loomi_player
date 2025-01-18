@@ -1,24 +1,30 @@
 import 'package:loomi_player/data/models/user_model.dart';
 import 'package:loomi_player/domain/usecases/get_user_firestore_usecase.dart';
+import 'package:loomi_player/domain/usecases/login_with_email_password_usecase.dart';
+import 'package:loomi_player/domain/usecases/login_with_google_usecase.dart';
+import 'package:loomi_player/domain/usecases/logout_usecase.dart';
 import 'package:loomi_player/domain/usecases/save_user_firestore_usecase.dart.dart';
 import 'package:loomi_player/domain/usecases/save_user_id_shared_preferences_usecase.dart';
 import 'package:mobx/mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../core/services/auth_service.dart';
 
 part 'login_store.g.dart';
 
 class LoginStore = _LoginStoreBase with _$LoginStore;
 
 abstract class _LoginStoreBase with Store {
-  final AuthService _authService = GetIt.I<AuthService>();
   final SaveUserIdSharedPreferencesUseCase _saveUserIdSharedPreferencesUseCase =
       GetIt.I<SaveUserIdSharedPreferencesUseCase>();
   final SaveUserFirestoreUseCase _saveUserFirestoreUseCase =
       GetIt.I<SaveUserFirestoreUseCase>();
   final GetUserFirestoreUseCase _getUserFirestoreUseCase =
       GetIt.I<GetUserFirestoreUseCase>();
+  final LoginWithGoogleUseCase _loginWithGoogleUseCase =
+      GetIt.I<LoginWithGoogleUseCase>();
+  final LoginWithEmailPasswordUseCase _loginWithEmailPasswordUseCase =
+      GetIt.I<LoginWithEmailPasswordUseCase>();
+  final LogoutUseCase _logoutUseCase = GetIt.I<LogoutUseCase>();
 
   @observable
   User? user;
@@ -36,7 +42,7 @@ abstract class _LoginStoreBase with Store {
   Future<void> loginWithGoogle() async {
     isLoading = true;
     try {
-      user = await _authService.signInWithGoogle();
+      user = await _loginWithGoogleUseCase();
       errorMessage = null;
 
       if (user != null) {
@@ -64,7 +70,7 @@ abstract class _LoginStoreBase with Store {
   Future<void> loginWithEmailPassword(String email, String password) async {
     isLoading = true;
     try {
-      user = await _authService.signInWithEmailPassword(email, password);
+      user = await _loginWithEmailPasswordUseCase(email, password);
       errorMessage = null;
 
       if (user != null) {
@@ -92,7 +98,7 @@ abstract class _LoginStoreBase with Store {
 
   @action
   Future<void> logout() async {
-    await _authService.signOut();
+    await _logoutUseCase();
     user = null;
     errorMessage = null;
   }

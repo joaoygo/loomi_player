@@ -1,13 +1,14 @@
+import 'package:loomi_player/domain/usecases/reset_password_usecase.dart';
 import 'package:mobx/mobx.dart';
 import 'package:get_it/get_it.dart';
-import '../../core/services/auth_service.dart';
 
 part 'forgot_password_store.g.dart';
 
 class ForgotPasswordStore = _ForgotPasswordStoreBase with _$ForgotPasswordStore;
 
 abstract class _ForgotPasswordStoreBase with Store {
-  final AuthService _authService = GetIt.I<AuthService>();
+  final ResetPasswordUsecase _resetPasswordUsecase =
+      GetIt.I<ResetPasswordUsecase>();
 
   @observable
   bool isLoading = false;
@@ -20,7 +21,7 @@ abstract class _ForgotPasswordStoreBase with Store {
     isLoading = true;
     errorMessage = null;
     try {
-      await _authService.sendPasswordResetEmail(email);
+      await _resetPasswordUsecase(email);
     } catch (e) {
       errorMessage = "Failed to send reset email. Please try again.";
     } finally {
