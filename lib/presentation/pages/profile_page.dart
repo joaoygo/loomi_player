@@ -41,25 +41,23 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 15.0, top: 15),
-            child: GestureDetector(
-                onTap: () {},
-                child: Container(
-                  width: 110,
-                  height: 42,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.primaryColorOpacity),
-                  ),
-                  child: const Center(
-                      child: Text('Edit Profile',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.primaryColor))),
-                )),
-          )
+              padding: const EdgeInsets.only(right: 15.0, top: 15),
+              child: CustomButtonRoundedWidget(
+                text: 'Edit Profile',
+                onTap: () async {
+                  final hasPermisson = await _profileStore.getTypeAccount();
+                  if (hasPermisson && context.mounted) {
+                    Navigator.pushNamed(context, '/edit-profile');
+                  }
+                  if (!hasPermisson && context.mounted) {
+                    SnackBar snackBar = SnackBar(
+                      content: Text('You do not have permission to do this'),
+                      backgroundColor: Colors.red,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                },
+              ))
         ],
       ),
       body: SafeArea(
@@ -231,6 +229,11 @@ class _ProfilePageState extends State<ProfilePage> {
               padding: const EdgeInsets.only(top: 32, bottom: 34),
               child: CustomButtonRoundedWidget(
                   text: 'Log out',
+                  borderColor: AppColors.primaryColorTextOpacity,
+                  textStyle: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
                   onTap: () {
                     _profileStore.clearUser();
                     Navigator.pushReplacementNamed(context, '/login');

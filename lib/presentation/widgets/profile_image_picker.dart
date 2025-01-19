@@ -5,13 +5,18 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:loomi_player/core/constants/app_colors.dart';
 import 'package:loomi_player/core/constants/assets_constants.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ProfileImagePicker extends StatefulWidget {
   final Function(File) onImagePicked;
+  final double? radius;
+  final File? initialImage;
 
   const ProfileImagePicker({
     super.key,
     required this.onImagePicked,
+    this.radius,
+    this.initialImage,
   });
 
   @override
@@ -22,6 +27,12 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
   File? _image;
 
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    _image = widget.initialImage;
+  }
 
   Future<void> _pickImage(ImageSource source) async {
     final XFile? pickedFile = await _picker.pickImage(source: source);
@@ -35,13 +46,24 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
   }
 
   Future<File> _compressImage(File image) async {
+    // Obtém o diretório de documentos da aplicação
+    final dir = await getApplicationDocumentsDirectory();
+    // Define o caminho para onde a imagem será salva
+    final targetPath =
+        '${dir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+    // Comprime a imagem e salva no diretório especificado
     final result = await FlutterImageCompress.compressWithFile(
       image.path,
       minWidth: 500,
       minHeight: 500,
       quality: 80,
+      rotate: 180,
+      format: CompressFormat.jpeg,
     );
-    return File(image.path)..writeAsBytesSync(result!);
+
+    // Retorna o arquivo comprimido
+    return File(targetPath)..writeAsBytesSync(result!);
   }
 
   @override
@@ -174,7 +196,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
         height: 100,
         decoration: BoxDecoration(
           color: Color.fromRGBO(188, 76, 241, 0.2),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(widget.radius ?? 20),
           image: _image != null
               ? DecorationImage(
                   image: FileImage(_image!),

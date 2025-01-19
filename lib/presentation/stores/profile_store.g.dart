@@ -80,6 +80,14 @@ mixin _$ProfileStore on _ProfileStore, Store {
     return _$clearUserAsyncAction.run(() => super.clearUser());
   }
 
+  late final _$getTypeAccountAsyncAction =
+      AsyncAction('_ProfileStore.getTypeAccount', context: context);
+
+  @override
+  Future<bool> getTypeAccount() {
+    return _$getTypeAccountAsyncAction.run(() => super.getTypeAccount());
+  }
+
   @override
   String toString() {
     return '''

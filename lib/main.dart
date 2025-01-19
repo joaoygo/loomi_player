@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:loomi_player/core/di/di.dart';
 import 'package:loomi_player/domain/entities/video_entity.dart';
 import 'package:loomi_player/presentation/pages/change_password_page.dart';
+import 'package:loomi_player/presentation/pages/edit_profile_page.dart';
 import 'package:loomi_player/presentation/pages/forgot_password_page.dart';
 import 'package:loomi_player/presentation/pages/home_page.dart';
 import 'package:loomi_player/presentation/pages/instruction_send_page.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         },
         '/profile': (context) => ProfilePage(),
         '/change-password': (context) => ChangePasswordPage(),
+        '/edit-profile': (context) => EditProfilePage(),
         '/': (context) => HomePage(),
       },
     );
