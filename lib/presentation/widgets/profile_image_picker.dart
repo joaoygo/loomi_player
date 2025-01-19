@@ -46,13 +46,9 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
   }
 
   Future<File> _compressImage(File image) async {
-    // Obtém o diretório de documentos da aplicação
     final dir = await getApplicationDocumentsDirectory();
-    // Define o caminho para onde a imagem será salva
     final targetPath =
         '${dir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-    // Comprime a imagem e salva no diretório especificado
     final result = await FlutterImageCompress.compressWithFile(
       image.path,
       minWidth: 500,
@@ -62,7 +58,6 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
       format: CompressFormat.jpeg,
     );
 
-    // Retorna o arquivo comprimido
     return File(targetPath)..writeAsBytesSync(result!);
   }
 
