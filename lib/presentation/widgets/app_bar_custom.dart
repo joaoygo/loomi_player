@@ -17,9 +17,10 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 4,
+      elevation: 0,
       automaticallyImplyLeading: false,
       centerTitle: true,
+      backgroundColor: Colors.transparent,
       title: SvgPicture.asset(AssetsConstants.logoMini),
       actions: [
         Padding(
