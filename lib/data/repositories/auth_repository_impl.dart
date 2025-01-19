@@ -37,4 +37,9 @@ class AuthRepositoryImpl implements AuthRepository {
       String email, String currentPassword, String newPassword) {
     return _authService.updatePassword(email, currentPassword, newPassword);
   }
+
+  @override
+  Future<bool> typeAccount() {
+    return _authService.typeAccount();
+  }
 }

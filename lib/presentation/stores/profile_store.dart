@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:loomi_player/domain/usecases/get_type_account_usecases.dart';
 import 'package:loomi_player/domain/usecases/get_user_id_shared_preferences_usecase.dart';
 import 'package:mobx/mobx.dart';
 import '../../domain/usecases/get_user_firestore_usecase.dart';
@@ -17,6 +18,8 @@ abstract class _ProfileStore with Store {
       GetIt.I<GetUserFirestoreUseCase>();
   final DeleteUserFirestoreUseCase _deleteUserFirestoreUseCase =
       GetIt.I<DeleteUserFirestoreUseCase>();
+  final GetTypeAccountUsecases _getTypeAccountUsecases =
+      GetIt.I<GetTypeAccountUsecases>();
   var logger = Logger();
 
   @observable
@@ -43,8 +46,8 @@ abstract class _ProfileStore with Store {
       }
       errorMessage = null;
     } catch (e) {
-      errorMessage = 'Erro ao obter usuário';
-      logger.d("Erro ao obter usuário: $e");
+      errorMessage = 'Error getting user';
+      logger.d("Error getting user: $e");
     } finally {
       isLoading = false;
     }
@@ -58,8 +61,8 @@ abstract class _ProfileStore with Store {
       user = null;
       errorMessage = null;
     } catch (e) {
-      errorMessage = 'Erro ao deletar usuário';
-      logger.d("Erro ao deletar usuário: $e");
+      errorMessage = 'Error deleting user';
+      logger.d("Error deleting user: $e");
     } finally {
       isLoading = false;
     }
@@ -70,5 +73,17 @@ abstract class _ProfileStore with Store {
     isLoading = true;
     await _getUserIdSharedPreferencesUseCase();
     isLoading = false;
+  }
+
+  @action
+  Future<bool> getTypeAccount() async {
+    try {
+      isLoading = true;
+      return await _getTypeAccountUsecases();
+    } catch (e) {
+      return false;
+    } finally {
+      isLoading = false;
+    }
   }
 }

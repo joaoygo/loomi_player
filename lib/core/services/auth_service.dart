@@ -112,6 +112,16 @@ class AuthService {
     }
   }
 
+  Future<bool> typeAccount() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      final providers =
+          user.providerData.map((info) => info.providerId).toList();
+      return !providers.contains('google.com') ? true : false;
+    }
+    return false;
+  }
+
   Future<void> signOut() async {
     await _auth.signOut();
     await _googleSignIn.signOut();

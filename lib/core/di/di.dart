@@ -12,6 +12,7 @@ import 'package:loomi_player/domain/repositories/video_repository.dart';
 import 'package:loomi_player/domain/usecases/change_password_usecases.dart';
 import 'package:loomi_player/domain/usecases/clear_user_usecase.dart';
 import 'package:loomi_player/domain/usecases/delete_user_firestore_usecase.dart';
+import 'package:loomi_player/domain/usecases/get_type_account_usecases.dart';
 import 'package:loomi_player/domain/usecases/get_user_firestore_usecase.dart';
 import 'package:loomi_player/domain/usecases/get_user_id_shared_preferences_usecase.dart';
 import 'package:loomi_player/domain/usecases/get_videos_usecase.dart';
@@ -23,6 +24,7 @@ import 'package:loomi_player/domain/usecases/reset_password_usecase.dart';
 import 'package:loomi_player/domain/usecases/save_user_firestore_usecase.dart.dart';
 import 'package:loomi_player/domain/usecases/save_user_id_shared_preferences_usecase.dart';
 import 'package:loomi_player/presentation/stores/change_password_store.dart';
+import 'package:loomi_player/presentation/stores/edit_profile_store.dart';
 import 'package:loomi_player/presentation/stores/forgot_password_store.dart';
 import 'package:loomi_player/presentation/stores/home_store.dart';
 import 'package:loomi_player/presentation/stores/login_store.dart';
@@ -102,6 +104,8 @@ Future<void> setupDI() async {
       () => ResetPasswordUsecase(getIt<AuthRepositoryImpl>()));
   getIt.registerLazySingleton<ChangePasswordUsecases>(
       () => ChangePasswordUsecases(getIt<AuthRepositoryImpl>()));
+  getIt.registerLazySingleton<GetTypeAccountUsecases>(
+      () => GetTypeAccountUsecases(getIt<AuthRepositoryImpl>()));
 
   // Stores
   getIt.registerLazySingleton<LoginStore>(() => LoginStore());
@@ -118,4 +122,5 @@ Future<void> setupDI() async {
   getIt.registerLazySingleton<ChangePasswordStore>(
     () => ChangePasswordStore(),
   );
+  getIt.registerLazySingleton<EditProfileStore>(() => EditProfileStore());
 }
