@@ -27,7 +27,7 @@ class AuthService {
       final userCredential = await _auth.signInWithCredential(credential);
       return userCredential.user;
     } catch (e) {
-      logger.d("Erro no login com Google: $e");
+      logger.d("Error logging in with Google: $e");
       return null;
     }
   }
@@ -38,7 +38,7 @@ class AuthService {
           email: email, password: password);
       return userCredential.user;
     } catch (e) {
-      logger.d("Erro no login com email/senha: $e");
+      logger.d("Error logging in with email/password: $e");
       return null;
     }
   }
@@ -47,7 +47,7 @@ class AuthService {
     try {
       await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {
-      logger.d("Erro ao enviar e-mail de redefinição: $e");
+      logger.d("Error sending reset email: $e");
       rethrow;
     }
   }
@@ -62,6 +62,53 @@ class AuthService {
       return newUser.user;
     } catch (e) {
       throw Exception("Error creating user: $e");
+    }
+  }
+
+  Future<bool> updatePassword(
+      String email, String currentPassword, String newPassword) async {
+    try {
+      final user = _auth.currentUser;
+
+      if (user != null) {
+        final providers =
+            user.providerData.map((info) => info.providerId).toList();
+
+        if (providers.contains('google.com')) {
+          logger.e(
+              "User authenticated with Google cannot change password directly.");
+          throw FirebaseAuthException(
+            code: 'google-account',
+            message: 'Users authenticated with Google do not have a password.'
+                'Reset password by linking an account via email.',
+          );
+        }
+
+        final credential = EmailAuthProvider.credential(
+          email: email,
+          password: currentPassword,
+        );
+        await user.reauthenticateWithCredential(credential);
+
+        await user.updatePassword(newPassword);
+        logger.d("Password changed successfully.");
+        return true;
+      }
+
+      logger.e("No authenticated user to perform the change.");
+      return false;
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        if (e.code == 'google-account') {
+          logger.e(e.message);
+          return false;
+        } else if (e.code == 'requires-recent-login') {
+          logger.e("The user needs to authenticate again.");
+        } else {
+          logger.e("Error changing password: $e");
+        }
+      }
+      return false;
     }
   }
 
