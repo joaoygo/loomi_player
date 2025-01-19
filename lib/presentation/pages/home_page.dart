@@ -24,44 +24,80 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 234, 233, 233),
-      appBar: AppBarCustom(
-        title: 'title',
-        nameUser: _store.user?.name,
-      ),
-      body: Observer(
-        builder: (_) {
-          if (_store.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (_store.videos.isEmpty) {
-            return const Center(
-              child: Text(
-                'Nenhum vídeo disponível.',
-                style: TextStyle(fontSize: 18, color: Colors.grey),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: const DecorationImage(
+                image: AssetImage('assets/imgs/barbie.png'),
+                fit: BoxFit.cover,
               ),
-            );
-          }
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black,
+                  Colors.transparent,
+                ],
+                stops: [0.0, 0.2],
+              ),
+            ),
+          ),
+          Column(
+            children: [
+              AppBarCustom(
+                title: 'title',
+                nameUser: _store.user?.name,
+              ),
+              Expanded(
+                child: Observer(
+                  builder: (_) {
+                    if (_store.isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-          return PageView.builder(
-            itemCount: _store.videos.length,
-            itemBuilder: (context, index) {
-              final video = _store.videos[index];
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: VideoCardWidget(video: video),
-              );
-            },
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _store.fetchVideos();
-        },
-        backgroundColor: Colors.deepPurple,
-        child: const Icon(Icons.refresh),
+                    if (_store.videos.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          'No videos available.',
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        ),
+                      );
+                    }
+
+                    return PageView.builder(
+                      itemCount: _store.videos.length,
+                      itemBuilder: (context, index) {
+                        final video = _store.videos[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: VideoCardWidget(video: video),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 16,
+            right: 16,
+            child: FloatingActionButton(
+              onPressed: () {
+                _store.fetchVideos();
+              },
+              backgroundColor: Colors.deepPurple,
+              child: const Icon(Icons.refresh),
+            ),
+          ),
+        ],
       ),
     );
   }

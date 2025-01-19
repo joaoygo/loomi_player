@@ -10,4 +10,5 @@ class AppColors {
   static const Color shadowWhite = Color.fromRGBO(68, 69, 82, 0.2);
   static const Color borderInput = Color.fromRGBO(108, 109, 122, 1);
   static const Color backgroundInput = Color.fromRGBO(35, 37, 44, 1);
+  static const Color backgroundCardColor = Color.fromRGBO(51, 51, 63, 0.9);
 }

@@ -23,14 +23,25 @@ class VideoCardWidget extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              gradient: const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+              image: const DecorationImage(
+                image: AssetImage('assets/imgs/barbie.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            height: double.infinity,
+            width: double.infinity,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
                 colors: [
-                  Color(0xff12c2e9),
-                  Color(0xffc471ed),
-                  Color(0xfff64f59)
+                  Colors.black,
+                  Colors.transparent,
                 ],
+                stops: [0.0, 0.9],
               ),
             ),
             height: double.infinity,
@@ -81,34 +92,36 @@ class VideoCardWidget extends StatelessWidget {
                       Text(
                         'coments',
                         style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white70),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white70,
+                        ),
                       ),
                       const SizedBox(width: 5),
                       Text(
                         '1000',
                         style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white70),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white70,
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 5),
                   Row(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         radius: 12,
                         backgroundColor: Color(0xff12c2e9),
                         child: Text('J'),
                       ),
                       const SizedBox(width: 5),
                       Container(
-                        constraints: BoxConstraints(maxWidth: 227),
-                        child: Text(
+                        constraints: const BoxConstraints(maxWidth: 227),
+                        child: const Text(
                           'Lorem ipsum dolor sit amet, consectd',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
                             color: Color.fromRGBO(217, 218, 222, 1),
                             fontWeight: FontWeight.w400,
@@ -137,7 +150,7 @@ class VideoCardWidget extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 19),
-                  Divider(color: Colors.white70),
+                  const Divider(color: Colors.white70),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -153,12 +166,13 @@ class VideoCardWidget extends StatelessWidget {
                                 },
                                 color: Colors.white,
                               ),
-                              Text(
+                              const Text(
                                 'Rate',
-                                style: const TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white70),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white70,
+                                ),
                               ),
                             ],
                           ),
@@ -173,35 +187,40 @@ class VideoCardWidget extends StatelessWidget {
                                 },
                                 color: Colors.white70,
                               ),
-                              Text(
+                              const Text(
                                 'Gift to someone?',
-                                style: const TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white70),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white70,
+                                ),
                               ),
                             ],
                           ),
                         ],
                       ),
-                      Column(children: [
-                        Text(
-                          'Available until',
-                          style: const TextStyle(
+                      Column(
+                        children: [
+                          const Text(
+                            'Available until',
+                            style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
-                              color: Colors.white),
-                        ),
-                        Text(
-                          DateFormat('MMM dd, yyyy')
-                              .format(video.publishedAt)
-                              .toUpperCase(),
-                          style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            DateFormat('MMM dd, yyyy')
+                                .format(video.publishedAt)
+                                .toUpperCase(),
+                            style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xffAA73F0)),
-                        ),
-                      ])
+                              color: Color(0xffAA73F0),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ],

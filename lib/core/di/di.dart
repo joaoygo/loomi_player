@@ -109,10 +109,6 @@ Future<void> setupDI() async {
     () => HomeStore(getVideosUseCase: getIt<GetVideosUseCase>()),
   );
   getIt.registerLazySingleton<ProfileStore>(
-    () => ProfileStore(
-      getIt<SaveUserFirestoreUseCase>(),
-      getIt<GetUserFirestoreUseCase>(),
-      getIt<DeleteUserFirestoreUseCase>(),
-    ),
+    () => ProfileStore(),
   );
 }

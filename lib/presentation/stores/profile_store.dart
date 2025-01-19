@@ -1,5 +1,6 @@
+import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
-import 'package:loomi_player/domain/usecases/save_user_firestore_usecase.dart.dart';
+import 'package:loomi_player/domain/usecases/get_user_id_shared_preferences_usecase.dart';
 import 'package:mobx/mobx.dart';
 import '../../domain/usecases/get_user_firestore_usecase.dart';
 import '../../domain/usecases/delete_user_firestore_usecase.dart';
@@ -10,15 +11,13 @@ part 'profile_store.g.dart';
 class ProfileStore = _ProfileStore with _$ProfileStore;
 
 abstract class _ProfileStore with Store {
-  final SaveUserFirestoreUseCase _saveUserFirestoreUseCase;
-  final GetUserFirestoreUseCase _getUserFirestoreUseCase;
-  final DeleteUserFirestoreUseCase _deleteUserFirestoreUseCase;
+  final GetUserIdSharedPreferencesUseCase _getUserIdSharedPreferencesUseCase =
+      GetIt.I<GetUserIdSharedPreferencesUseCase>();
+  final GetUserFirestoreUseCase _getUserFirestoreUseCase =
+      GetIt.I<GetUserFirestoreUseCase>();
+  final DeleteUserFirestoreUseCase _deleteUserFirestoreUseCase =
+      GetIt.I<DeleteUserFirestoreUseCase>();
   var logger = Logger();
-  _ProfileStore(
-    this._saveUserFirestoreUseCase,
-    this._getUserFirestoreUseCase,
-    this._deleteUserFirestoreUseCase,
-  );
 
   @observable
   UserModel? user;
@@ -30,25 +29,12 @@ abstract class _ProfileStore with Store {
   String? errorMessage;
 
   @action
-  Future<void> saveUser(UserModel userModel) async {
+  Future<void> getUser() async {
     try {
       isLoading = true;
-      await _saveUserFirestoreUseCase(userModel.uid, userModel.toJson());
-      user = userModel;
-      errorMessage = null;
-    } catch (e) {
-      errorMessage = 'Erro ao salvar usuário';
-      logger.d("Erro ao salvar usuário: $e");
-    } finally {
-      isLoading = false;
-    }
-  }
-
-  @action
-  Future<void> getUser(String uid) async {
-    try {
-      isLoading = true;
-      final userData = await _getUserFirestoreUseCase(uid);
+      final userId = await _getUserIdSharedPreferencesUseCase();
+      if (userId == null) return;
+      final userData = await _getUserFirestoreUseCase(userId);
 
       if (userData != null) {
         user = UserModel.fromJson(userData);
@@ -77,5 +63,12 @@ abstract class _ProfileStore with Store {
     } finally {
       isLoading = false;
     }
+  }
+
+  @action
+  Future<void> clearUser() async {
+    isLoading = true;
+    await _getUserIdSharedPreferencesUseCase();
+    isLoading = false;
   }
 }

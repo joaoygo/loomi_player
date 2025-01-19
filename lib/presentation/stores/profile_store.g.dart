@@ -56,20 +56,12 @@ mixin _$ProfileStore on _ProfileStore, Store {
     });
   }
 
-  late final _$saveUserAsyncAction =
-      AsyncAction('_ProfileStore.saveUser', context: context);
-
-  @override
-  Future<void> saveUser(UserModel userModel) {
-    return _$saveUserAsyncAction.run(() => super.saveUser(userModel));
-  }
-
   late final _$getUserAsyncAction =
       AsyncAction('_ProfileStore.getUser', context: context);
 
   @override
-  Future<void> getUser(String uid) {
-    return _$getUserAsyncAction.run(() => super.getUser(uid));
+  Future<void> getUser() {
+    return _$getUserAsyncAction.run(() => super.getUser());
   }
 
   late final _$deleteUserAsyncAction =
@@ -78,6 +70,14 @@ mixin _$ProfileStore on _ProfileStore, Store {
   @override
   Future<void> deleteUser(String uid) {
     return _$deleteUserAsyncAction.run(() => super.deleteUser(uid));
+  }
+
+  late final _$clearUserAsyncAction =
+      AsyncAction('_ProfileStore.clearUser', context: context);
+
+  @override
+  Future<void> clearUser() {
+    return _$clearUserAsyncAction.run(() => super.clearUser());
   }
 
   @override
