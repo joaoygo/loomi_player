@@ -31,4 +31,10 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> signOut() {
     return _authService.signOut();
   }
+
+  @override
+  Future<bool> updatePassword(
+      String email, String currentPassword, String newPassword) {
+    return _authService.updatePassword(email, currentPassword, newPassword);
+  }
 }

@@ -109,7 +109,9 @@ class _ProfilePageState extends State<ProfilePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, '/change-password');
+                },
                 child: CustomCardWidget(
                   icon: Icon(Icons.shield_outlined, color: Colors.white),
                   text: 'Change Password',
