@@ -4,9 +4,9 @@ import 'package:get_it/get_it.dart';
 
 part 'forgot_password_store.g.dart';
 
-class ForgotPasswordStore = _ForgotPasswordStoreBase with _$ForgotPasswordStore;
+class ForgotPasswordStore = ForgotPasswordStoreBase with _$ForgotPasswordStore;
 
-abstract class _ForgotPasswordStoreBase with Store {
+abstract class ForgotPasswordStoreBase with Store {
   final ResetPasswordUsecase _resetPasswordUsecase =
       GetIt.I<ResetPasswordUsecase>();
 

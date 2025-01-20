@@ -9,9 +9,9 @@ import '../../data/models/user_model.dart';
 
 part 'profile_store.g.dart';
 
-class ProfileStore = _ProfileStore with _$ProfileStore;
+class ProfileStore = ProfileStoreBase with _$ProfileStore;
 
-abstract class _ProfileStore with Store {
+abstract class ProfileStoreBase with Store {
   final GetUserIdSharedPreferencesUseCase _getUserIdSharedPreferencesUseCase =
       GetIt.I<GetUserIdSharedPreferencesUseCase>();
   final GetUserFirestoreUseCase _getUserFirestoreUseCase =

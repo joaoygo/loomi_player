@@ -8,15 +8,15 @@ import 'package:loomi_player/domain/usecases/get_videos_usecase.dart';
 
 part 'home_store.g.dart';
 
-class HomeStore = _HomeStoreBase with _$HomeStore;
+class HomeStore = HomeStoreBase with _$HomeStore;
 
-abstract class _HomeStoreBase with Store {
+abstract class HomeStoreBase with Store {
   final GetVideosUseCase getVideosUseCase;
   final GetUserFirestoreUseCase _getUserFirestoreUseCase =
       GetIt.I<GetUserFirestoreUseCase>();
   final GetUserIdSharedPreferencesUseCase _getUserIdSharedPreferencesUseCase =
       GetIt.I<GetUserIdSharedPreferencesUseCase>();
-  _HomeStoreBase({required this.getVideosUseCase}) {
+  HomeStoreBase({required this.getVideosUseCase}) {
     fetchVideos();
   }
 

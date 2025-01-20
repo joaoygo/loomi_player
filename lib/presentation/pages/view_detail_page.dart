@@ -8,10 +8,10 @@ class VideoDetailPage extends StatefulWidget {
   const VideoDetailPage({super.key, required this.video});
 
   @override
-  _VideoDetailPageState createState() => _VideoDetailPageState();
+  VideoDetailPageState createState() => VideoDetailPageState();
 }
 
-class _VideoDetailPageState extends State<VideoDetailPage> {
+class VideoDetailPageState extends State<VideoDetailPage> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
 

@@ -8,9 +8,9 @@ part of 'register_profile_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
+mixin _$RegisterProfileStore on RegisterProfileStoreBase, Store {
   late final _$userNameAtom =
-      Atom(name: '_RegisterProfileStore.userName', context: context);
+      Atom(name: 'RegisterProfileStoreBase.userName', context: context);
 
   @override
   String get userName {
@@ -26,7 +26,7 @@ mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
   }
 
   late final _$profileImageAtom =
-      Atom(name: '_RegisterProfileStore.profileImage', context: context);
+      Atom(name: 'RegisterProfileStoreBase.profileImage', context: context);
 
   @override
   String get profileImage {
@@ -42,7 +42,7 @@ mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
   }
 
   late final _$isLoadingAtom =
-      Atom(name: '_RegisterProfileStore.isLoading', context: context);
+      Atom(name: 'RegisterProfileStoreBase.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -58,7 +58,7 @@ mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
   }
 
   late final _$getUserAsyncAction =
-      AsyncAction('_RegisterProfileStore.getUser', context: context);
+      AsyncAction('RegisterProfileStoreBase.getUser', context: context);
 
   @override
   Future<String> getUser() {
@@ -66,7 +66,7 @@ mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
   }
 
   late final _$saveUserAsyncAction =
-      AsyncAction('_RegisterProfileStore.saveUser', context: context);
+      AsyncAction('RegisterProfileStoreBase.saveUser', context: context);
 
   @override
   Future<void> saveUser(String uid) {
@@ -74,35 +74,35 @@ mixin _$RegisterProfileStore on _RegisterProfileStore, Store {
   }
 
   late final _$clearUserAsyncAction =
-      AsyncAction('_RegisterProfileStore.clearUser', context: context);
+      AsyncAction('RegisterProfileStoreBase.clearUser', context: context);
 
   @override
   Future<void> clearUser() {
     return _$clearUserAsyncAction.run(() => super.clearUser());
   }
 
-  late final _$_RegisterProfileStoreActionController =
-      ActionController(name: '_RegisterProfileStore', context: context);
+  late final _$RegisterProfileStoreBaseActionController =
+      ActionController(name: 'RegisterProfileStoreBase', context: context);
 
   @override
   void setUserName(String name) {
-    final _$actionInfo = _$_RegisterProfileStoreActionController.startAction(
-        name: '_RegisterProfileStore.setUserName');
+    final _$actionInfo = _$RegisterProfileStoreBaseActionController.startAction(
+        name: 'RegisterProfileStoreBase.setUserName');
     try {
       return super.setUserName(name);
     } finally {
-      _$_RegisterProfileStoreActionController.endAction(_$actionInfo);
+      _$RegisterProfileStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setProfileImage(String imagePath) {
-    final _$actionInfo = _$_RegisterProfileStoreActionController.startAction(
-        name: '_RegisterProfileStore.setProfileImage');
+    final _$actionInfo = _$RegisterProfileStoreBaseActionController.startAction(
+        name: 'RegisterProfileStoreBase.setProfileImage');
     try {
       return super.setProfileImage(imagePath);
     } finally {
-      _$_RegisterProfileStoreActionController.endAction(_$actionInfo);
+      _$RegisterProfileStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

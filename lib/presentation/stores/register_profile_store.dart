@@ -7,9 +7,10 @@ import 'package:mobx/mobx.dart';
 
 part 'register_profile_store.g.dart';
 
-class RegisterProfileStore = _RegisterProfileStore with _$RegisterProfileStore;
+class RegisterProfileStore = RegisterProfileStoreBase
+    with _$RegisterProfileStore;
 
-abstract class _RegisterProfileStore with Store {
+abstract class RegisterProfileStoreBase with Store {
   final GetUserIdSharedPreferencesUseCase _getUserIdSharedPreferencesUseCase =
       GetIt.I<GetUserIdSharedPreferencesUseCase>();
   final ClearUserIdSharedPreferencesUseCase

@@ -20,10 +20,10 @@ class ProfileImagePicker extends StatefulWidget {
   });
 
   @override
-  _ProfileImagePickerState createState() => _ProfileImagePickerState();
+  ProfileImagePickerState createState() => ProfileImagePickerState();
 }
 
-class _ProfileImagePickerState extends State<ProfileImagePicker> {
+class ProfileImagePickerState extends State<ProfileImagePicker> {
   File? _image;
 
   final ImagePicker _picker = ImagePicker();

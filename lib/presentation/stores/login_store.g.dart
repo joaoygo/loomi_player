@@ -8,8 +8,8 @@ part of 'login_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$LoginStore on _LoginStoreBase, Store {
-  late final _$userAtom = Atom(name: '_LoginStoreBase.user', context: context);
+mixin _$LoginStore on LoginStoreBase, Store {
+  late final _$userAtom = Atom(name: 'LoginStoreBase.user', context: context);
 
   @override
   User? get user {
@@ -25,7 +25,7 @@ mixin _$LoginStore on _LoginStoreBase, Store {
   }
 
   late final _$isLoadingAtom =
-      Atom(name: '_LoginStoreBase.isLoading', context: context);
+      Atom(name: 'LoginStoreBase.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -41,7 +41,7 @@ mixin _$LoginStore on _LoginStoreBase, Store {
   }
 
   late final _$errorMessageAtom =
-      Atom(name: '_LoginStoreBase.errorMessage', context: context);
+      Atom(name: 'LoginStoreBase.errorMessage', context: context);
 
   @override
   String? get errorMessage {
@@ -57,7 +57,7 @@ mixin _$LoginStore on _LoginStoreBase, Store {
   }
 
   late final _$isProfileSetupRequiredAtom =
-      Atom(name: '_LoginStoreBase.isProfileSetupRequired', context: context);
+      Atom(name: 'LoginStoreBase.isProfileSetupRequired', context: context);
 
   @override
   bool get isProfileSetupRequired {
@@ -74,7 +74,7 @@ mixin _$LoginStore on _LoginStoreBase, Store {
   }
 
   late final _$loginWithGoogleAsyncAction =
-      AsyncAction('_LoginStoreBase.loginWithGoogle', context: context);
+      AsyncAction('LoginStoreBase.loginWithGoogle', context: context);
 
   @override
   Future<void> loginWithGoogle() {
@@ -82,7 +82,7 @@ mixin _$LoginStore on _LoginStoreBase, Store {
   }
 
   late final _$loginWithEmailPasswordAsyncAction =
-      AsyncAction('_LoginStoreBase.loginWithEmailPassword', context: context);
+      AsyncAction('LoginStoreBase.loginWithEmailPassword', context: context);
 
   @override
   Future<void> loginWithEmailPassword(String email, String password) {
@@ -91,7 +91,7 @@ mixin _$LoginStore on _LoginStoreBase, Store {
   }
 
   late final _$logoutAsyncAction =
-      AsyncAction('_LoginStoreBase.logout', context: context);
+      AsyncAction('LoginStoreBase.logout', context: context);
 
   @override
   Future<void> logout() {

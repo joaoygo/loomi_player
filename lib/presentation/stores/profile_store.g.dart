@@ -8,8 +8,8 @@ part of 'profile_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$ProfileStore on _ProfileStore, Store {
-  late final _$userAtom = Atom(name: '_ProfileStore.user', context: context);
+mixin _$ProfileStore on ProfileStoreBase, Store {
+  late final _$userAtom = Atom(name: 'ProfileStoreBase.user', context: context);
 
   @override
   UserModel? get user {
@@ -25,7 +25,7 @@ mixin _$ProfileStore on _ProfileStore, Store {
   }
 
   late final _$isLoadingAtom =
-      Atom(name: '_ProfileStore.isLoading', context: context);
+      Atom(name: 'ProfileStoreBase.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -41,7 +41,7 @@ mixin _$ProfileStore on _ProfileStore, Store {
   }
 
   late final _$errorMessageAtom =
-      Atom(name: '_ProfileStore.errorMessage', context: context);
+      Atom(name: 'ProfileStoreBase.errorMessage', context: context);
 
   @override
   String? get errorMessage {
@@ -57,7 +57,7 @@ mixin _$ProfileStore on _ProfileStore, Store {
   }
 
   late final _$getUserAsyncAction =
-      AsyncAction('_ProfileStore.getUser', context: context);
+      AsyncAction('ProfileStoreBase.getUser', context: context);
 
   @override
   Future<void> getUser() {
@@ -65,7 +65,7 @@ mixin _$ProfileStore on _ProfileStore, Store {
   }
 
   late final _$deleteUserAsyncAction =
-      AsyncAction('_ProfileStore.deleteUser', context: context);
+      AsyncAction('ProfileStoreBase.deleteUser', context: context);
 
   @override
   Future<bool> deleteUser() {
@@ -73,7 +73,7 @@ mixin _$ProfileStore on _ProfileStore, Store {
   }
 
   late final _$clearUserAsyncAction =
-      AsyncAction('_ProfileStore.clearUser', context: context);
+      AsyncAction('ProfileStoreBase.clearUser', context: context);
 
   @override
   Future<void> clearUser() {
@@ -81,7 +81,7 @@ mixin _$ProfileStore on _ProfileStore, Store {
   }
 
   late final _$getTypeAccountAsyncAction =
-      AsyncAction('_ProfileStore.getTypeAccount', context: context);
+      AsyncAction('ProfileStoreBase.getTypeAccount', context: context);
 
   @override
   Future<bool> getTypeAccount() {

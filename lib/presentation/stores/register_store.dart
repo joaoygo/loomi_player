@@ -8,9 +8,9 @@ import 'package:get_it/get_it.dart';
 
 part 'register_store.g.dart';
 
-class RegisterStore = _RegisterStoreBase with _$RegisterStore;
+class RegisterStore = RegisterStoreBase with _$RegisterStore;
 
-abstract class _RegisterStoreBase with Store {
+abstract class RegisterStoreBase with Store {
   final GetUserFirestoreUseCase _getUserFirestoreUseCase =
       GetIt.I<GetUserFirestoreUseCase>();
   final LoginWithGoogleUseCase _loginWithGoogleUseCase =

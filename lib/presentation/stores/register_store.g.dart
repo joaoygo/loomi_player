@@ -8,9 +8,9 @@ part of 'register_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$RegisterStore on _RegisterStoreBase, Store {
+mixin _$RegisterStore on RegisterStoreBase, Store {
   late final _$isLoadingAtom =
-      Atom(name: '_RegisterStoreBase.isLoading', context: context);
+      Atom(name: 'RegisterStoreBase.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -26,7 +26,7 @@ mixin _$RegisterStore on _RegisterStoreBase, Store {
   }
 
   late final _$errorMessageAtom =
-      Atom(name: '_RegisterStoreBase.errorMessage', context: context);
+      Atom(name: 'RegisterStoreBase.errorMessage', context: context);
 
   @override
   String? get errorMessage {
@@ -42,7 +42,7 @@ mixin _$RegisterStore on _RegisterStoreBase, Store {
   }
 
   late final _$registerWithGoogleAsyncAction =
-      AsyncAction('_RegisterStoreBase.registerWithGoogle', context: context);
+      AsyncAction('RegisterStoreBase.registerWithGoogle', context: context);
 
   @override
   Future<UserModel?> registerWithGoogle() {
@@ -51,7 +51,7 @@ mixin _$RegisterStore on _RegisterStoreBase, Store {
   }
 
   late final _$registerAsyncAction =
-      AsyncAction('_RegisterStoreBase.register', context: context);
+      AsyncAction('RegisterStoreBase.register', context: context);
 
   @override
   Future<UserModel?> register(String email, String password) {
