@@ -7,6 +7,13 @@ poderá assistir.
 # 🛠️ Funcionalidades
 
 - ✅ [Funcionalidade 1 - Login com autenticação Firebase]
+- ✅ [Funcionalidade 2 - Registro com autenticação Firebase]
+- ✅ [Funcionalidade 3 - Recuperação de senha com autenticação Firebase]
+- ✅ [Funcionalidade 4 - Redefinição de senha com autenticação Firebase]
+- ✅ [Funcionalidade 5 - Exibição de video]
+- ✅ [Funcionalidade 6 - Reprodução de video]
+- ✅ [Funcionalidade 7 - Listagem de video]
+- ✅ [Funcionalidade 8 - Armazenamento de dados no firestore]
 
 # 🚀 Tecnologias Utilizadas
 
