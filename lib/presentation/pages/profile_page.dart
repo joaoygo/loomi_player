@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -82,9 +83,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       radius: 57,
                       backgroundColor: AppColors.primaryColor,
                       backgroundImage: _profileStore.user?.photoUrl != null &&
-                              _profileStore.user!.photoUrl!.isNotEmpty
+                              _profileStore.user!.photoUrl!.contains('https://')
                           ? NetworkImage(_profileStore.user!.photoUrl!)
-                          : null,
+                          : _profileStore.user?.photoUrl != null &&
+                                  _profileStore.user!.photoUrl!.isNotEmpty
+                              ? FileImage(File(_profileStore.user!.photoUrl!))
+                              : null,
                       child: _profileStore.user?.photoUrl == null ||
                               _profileStore.user!.photoUrl!.isEmpty
                           ? Icon(Icons.person, size: 50, color: Colors.white)

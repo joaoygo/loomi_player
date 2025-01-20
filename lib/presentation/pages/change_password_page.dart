@@ -7,7 +7,14 @@ import 'package:loomi_player/presentation/stores/change_password_store.dart';
 import 'package:loomi_player/presentation/widgets/primary_button.dart';
 import 'package:loomi_player/presentation/widgets/primary_input_text.dart';
 
-class ChangePasswordPage extends StatelessWidget {
+class ChangePasswordPage extends StatefulWidget {
+  const ChangePasswordPage({super.key});
+
+  @override
+  State<ChangePasswordPage> createState() => _ChangePasswordPageState();
+}
+
+class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final TextEditingController currentPasswordController =
       TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
@@ -16,7 +23,13 @@ class ChangePasswordPage extends StatelessWidget {
   final ChangePasswordStore _changePasswordStore =
       GetIt.I<ChangePasswordStore>();
 
-  ChangePasswordPage({super.key});
+  @override
+  void dispose() {
+    currentPasswordController.dispose();
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

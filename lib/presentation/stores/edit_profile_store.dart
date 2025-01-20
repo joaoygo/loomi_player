@@ -54,7 +54,6 @@ abstract class EditProfileStoreBase with Store {
       if (userData != null) {
         userName = userData['name'];
         profileImageFile = File(userData['photoUrl']);
-        logger.d("Profile image path: $userName");
       }
     } catch (e) {
       logger.d("Error getting user: $e");

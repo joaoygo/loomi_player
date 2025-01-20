@@ -105,15 +105,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: PrimaryInputText(
-                          controller: passwordController,
-                          hintText: "Password",
-                        )),
+                            controller: passwordController,
+                            hintText: "Password",
+                            isPassword: true)),
                     const SizedBox(height: 23),
                     Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: PrimaryInputText(
                           controller: confirmPasswordController,
                           hintText: "Password",
+                          isPassword: true,
                         )),
                     const SizedBox(height: 23),
                     Padding(
