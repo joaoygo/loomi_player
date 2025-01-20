@@ -57,6 +57,46 @@ mixin _$EditProfileStore on EditProfileStoreBase, Store {
     });
   }
 
+  late final _$profileImageFileAtom =
+      Atom(name: 'EditProfileStoreBase.profileImageFile', context: context);
+
+  @override
+  File? get profileImageFile {
+    _$profileImageFileAtom.reportRead();
+    return super.profileImageFile;
+  }
+
+  @override
+  set profileImageFile(File? value) {
+    _$profileImageFileAtom.reportWrite(value, super.profileImageFile, () {
+      super.profileImageFile = value;
+    });
+  }
+
+  late final _$getUserAsyncAction =
+      AsyncAction('EditProfileStoreBase.getUser', context: context);
+
+  @override
+  Future<void> getUser() {
+    return _$getUserAsyncAction.run(() => super.getUser());
+  }
+
+  late final _$saveUserAsyncAction =
+      AsyncAction('EditProfileStoreBase.saveUser', context: context);
+
+  @override
+  Future<void> saveUser(String uid) {
+    return _$saveUserAsyncAction.run(() => super.saveUser(uid));
+  }
+
+  late final _$updateProfileAsyncAction =
+      AsyncAction('EditProfileStoreBase.updateProfile', context: context);
+
+  @override
+  Future<bool> updateProfile() {
+    return _$updateProfileAsyncAction.run(() => super.updateProfile());
+  }
+
   late final _$EditProfileStoreBaseActionController =
       ActionController(name: 'EditProfileStoreBase', context: context);
 
@@ -87,7 +127,8 @@ mixin _$EditProfileStore on EditProfileStoreBase, Store {
     return '''
 userName: ${userName},
 profileImage: ${profileImage},
-isLoading: ${isLoading}
+isLoading: ${isLoading},
+profileImageFile: ${profileImageFile}
     ''';
   }
 }

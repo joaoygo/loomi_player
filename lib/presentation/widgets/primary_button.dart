@@ -5,12 +5,14 @@ class PrimaryButton extends StatelessWidget {
   final void Function() ontap;
   final String text;
   final double? width;
+  final double? fontText;
 
   const PrimaryButton({
     super.key,
     required this.ontap,
     required this.text,
     this.width,
+    this.fontText,
   });
 
   @override
@@ -40,7 +42,7 @@ class PrimaryButton extends StatelessWidget {
           style: TextStyle(
               color: AppColors.primaryColor,
               fontWeight: FontWeight.bold,
-              fontSize: 20),
+              fontSize: fontText ?? 20),
         )),
       ),
     );

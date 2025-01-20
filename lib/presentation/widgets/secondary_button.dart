@@ -5,12 +5,14 @@ class SecondaryButton extends StatelessWidget {
   final void Function() ontap;
   final String text;
   final double? width;
+  final double? fontText;
 
   const SecondaryButton({
     super.key,
     required this.ontap,
     required this.text,
     this.width,
+    this.fontText,
   });
 
   @override
@@ -31,7 +33,7 @@ class SecondaryButton extends StatelessWidget {
           style: TextStyle(
               color: AppColors.primaryColor,
               fontWeight: FontWeight.bold,
-              fontSize: 20),
+              fontSize: fontText ?? 20),
         )),
       ),
     );

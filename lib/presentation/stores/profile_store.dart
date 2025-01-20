@@ -54,18 +54,22 @@ abstract class _ProfileStore with Store {
   }
 
   @action
-  Future<void> deleteUser(String uid) async {
+  Future<bool> deleteUser() async {
     try {
       isLoading = true;
+      final uid = await _getUserIdSharedPreferencesUseCase();
+      if (uid == null) return false;
       await _deleteUserFirestoreUseCase(uid);
       user = null;
       errorMessage = null;
+      return true;
     } catch (e) {
       errorMessage = 'Error deleting user';
       logger.d("Error deleting user: $e");
     } finally {
       isLoading = false;
     }
+    return false;
   }
 
   @action

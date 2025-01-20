@@ -122,6 +122,39 @@ class AuthService {
     return false;
   }
 
+  Future<bool> deleteUser(String email, String password) async {
+    try {
+      final user = _auth.currentUser;
+
+      if (user != null) {
+        final credential = EmailAuthProvider.credential(
+          email: email,
+          password: password,
+        );
+        await user.reauthenticateWithCredential(credential);
+
+        await user.delete();
+        logger.d("User deleted successfully.");
+        return true;
+      } else {
+        logger.e("No authenticated user to delete.");
+        return false;
+      }
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        if (e.code == 'requires-recent-login') {
+          logger.e(
+              "The user needs to authenticate again to perform this action.");
+        } else {
+          logger.e("Error deleting user: $e");
+        }
+      } else {
+        logger.e("Unexpected error: $e");
+      }
+      return false;
+    }
+  }
+
   Future<void> signOut() async {
     await _auth.signOut();
     await _googleSignIn.signOut();

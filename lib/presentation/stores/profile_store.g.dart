@@ -68,8 +68,8 @@ mixin _$ProfileStore on _ProfileStore, Store {
       AsyncAction('_ProfileStore.deleteUser', context: context);
 
   @override
-  Future<void> deleteUser(String uid) {
-    return _$deleteUserAsyncAction.run(() => super.deleteUser(uid));
+  Future<bool> deleteUser() {
+    return _$deleteUserAsyncAction.run(() => super.deleteUser());
   }
 
   late final _$clearUserAsyncAction =
