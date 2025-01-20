@@ -43,7 +43,7 @@ abstract class RegisterStoreBase with Store {
       final isUserActive = await _getUserFirestoreUseCase(newUser.email ?? '');
 
       if (isUserActive != null) {
-        errorMessage = 'Usuário já cadastrado';
+        errorMessage = 'User already registered';
         return null;
       }
       await _saveUserIdSharedPreferencesUseCase(userModel);
@@ -65,7 +65,7 @@ abstract class RegisterStoreBase with Store {
       final isUserActive = await _getUserFirestoreUseCase(email);
 
       if (isUserActive != null) {
-        errorMessage = 'Usuário já cadastrado';
+        errorMessage = 'User already registered';
         return null;
       }
 

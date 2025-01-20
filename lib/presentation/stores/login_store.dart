@@ -62,7 +62,7 @@ abstract class LoginStoreBase with Store {
         await _saveUserIdSharedPreferencesUseCase(userModel);
       }
     } catch (e) {
-      errorMessage = 'Erro ao fazer login com Google';
+      errorMessage = 'Error logging in with Google';
     } finally {
       isLoading = false;
     }
@@ -96,7 +96,7 @@ abstract class LoginStoreBase with Store {
         await _saveUserIdSharedPreferencesUseCase(userModel);
       }
     } catch (e) {
-      errorMessage = 'Email ou senha incorretos';
+      errorMessage = 'Incorrect email or password';
     } finally {
       isLoading = false;
     }

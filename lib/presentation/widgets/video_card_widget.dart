@@ -182,7 +182,8 @@ class VideoCardWidget extends StatelessWidget {
                                 icon:
                                     SvgPicture.asset(AssetsConstants.iconShare),
                                 onPressed: () {
-                                  String linkToShare = 'https://seulink.com';
+                                  String linkToShare =
+                                      'https://source.unsplash.com/400x300';
                                   Share.share(linkToShare);
                                 },
                                 color: Colors.white70,

@@ -47,7 +47,7 @@ abstract class HomeStoreBase with Store {
         },
       );
     } catch (e) {
-      errorMessage = 'Erro inesperado: $e';
+      errorMessage = 'Error : $e';
     } finally {
       isLoading = false;
     }

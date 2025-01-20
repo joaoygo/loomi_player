@@ -30,7 +30,7 @@ class VideoRepositoryImpl implements VideoRepository {
 
       return videos;
     } else {
-      throw Exception('A resposta da API não contém dados.');
+      throw Exception('The API response contains no data.');
     }
   }
 

@@ -10,8 +10,8 @@ class FirestoreService {
     try {
       await usersCollection.doc(uid).set(userData, SetOptions(merge: true));
     } catch (e) {
-      logger.w("Erro ao salvar usuário no Firestore: $e");
-      throw Exception("Erro ao salvar dados no Firestore");
+      logger.w("Error saving user in Firestore: $e");
+      throw Exception("Error saving user in Firestore");
     }
   }
 
@@ -20,8 +20,8 @@ class FirestoreService {
       final snapshot = await usersCollection.doc(uid).get();
       return snapshot.exists ? snapshot.data() as Map<String, dynamic>? : null;
     } catch (e) {
-      logger.d("Erro ao buscar usuário no Firestore: $e");
-      throw Exception("Erro ao buscar dados do Firestore");
+      logger.d("Error searching for user in Firestore: $e");
+      throw Exception("Error searching for user in Firestore");
     }
   }
 
@@ -29,8 +29,8 @@ class FirestoreService {
     try {
       await usersCollection.doc(uid).delete();
     } catch (e) {
-      logger.d("Erro ao deletar usuário no Firestore: $e");
-      throw Exception("Erro ao deletar dados do Firestore");
+      logger.d("Error deleting user in Firestore: $e");
+      throw Exception("Error deleting user in Firestore");
     }
   }
 }
