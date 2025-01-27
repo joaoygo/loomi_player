@@ -8,7 +8,7 @@ import 'package:loomi_player/presentation/widgets/card_comment_widget.dart';
 class CommentsListWidget extends StatefulWidget {
   final List<CommentsModel> commentsList;
   final Function() onClose;
-  final Function(String) onReply; // Alterado para aceitar o comentário
+  final Function(String) onReply;
   final String avatarUrl;
   final String userName;
   final bool? isFullScreen;
@@ -41,7 +41,6 @@ class _CommentsListWidgetState extends State<CommentsListWidget> {
         padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
         child: Column(
           children: [
-            // Header com contagem de comentários e botão de fechar
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -67,7 +66,6 @@ class _CommentsListWidgetState extends State<CommentsListWidget> {
               ],
             ),
             const SizedBox(height: 20),
-            // Lista de comentários
             Expanded(
               child: ListView.builder(
                 itemCount: widget.commentsList.length,
@@ -93,7 +91,6 @@ class _CommentsListWidgetState extends State<CommentsListWidget> {
               ),
             ),
             const SizedBox(height: 20),
-            // Campo de texto e botão de envio
             Row(
               children: [
                 CircleAvatar(
@@ -139,7 +136,7 @@ class _CommentsListWidgetState extends State<CommentsListWidget> {
                   onPressed: () {
                     if (_commentController.text.trim().isNotEmpty) {
                       widget.onReply(_commentController.text.trim());
-                      _commentController.clear(); // Limpar o campo após enviar
+                      _commentController.clear();
                     }
                   },
                   icon: Icon(Icons.send, color: AppColors.primaryColor),

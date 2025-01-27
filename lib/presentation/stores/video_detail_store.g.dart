@@ -145,6 +145,22 @@ mixin _$VideoDetailStore on VideoDetailStoreBase, Store {
     });
   }
 
+  late final _$showControlsAtom =
+      Atom(name: 'VideoDetailStoreBase.showControls', context: context);
+
+  @override
+  bool get showControls {
+    _$showControlsAtom.reportRead();
+    return super.showControls;
+  }
+
+  @override
+  set showControls(bool value) {
+    _$showControlsAtom.reportWrite(value, super.showControls, () {
+      super.showControls = value;
+    });
+  }
+
   late final _$initializeVideoAsyncAction =
       AsyncAction('VideoDetailStoreBase.initializeVideo', context: context);
 
@@ -182,6 +198,17 @@ mixin _$VideoDetailStore on VideoDetailStoreBase, Store {
 
   late final _$VideoDetailStoreBaseActionController =
       ActionController(name: 'VideoDetailStoreBase', context: context);
+
+  @override
+  void toggleControlsVisibility() {
+    final _$actionInfo = _$VideoDetailStoreBaseActionController.startAction(
+        name: 'VideoDetailStoreBase.toggleControlsVisibility');
+    try {
+      return super.toggleControlsVisibility();
+    } finally {
+      _$VideoDetailStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void togglePlayPause() {
@@ -249,6 +276,7 @@ isPlaying: ${isPlaying},
 currentPosition: ${currentPosition},
 isExpanded: ${isExpanded},
 showComments: ${showComments},
+showControls: ${showControls},
 totalDuration: ${totalDuration}
     ''';
   }

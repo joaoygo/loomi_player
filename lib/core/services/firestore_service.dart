@@ -39,17 +39,13 @@ class FirestoreService {
   Future<bool> addCommentToVideo(
       String videoId, String userName, String comment, String photoUrl) async {
     try {
-      // Define os dados do comentário
       final commentData = {
         'userName': userName,
         'comment': comment,
-        'timestamp': DateTime.now()
-            .toUtc()
-            .toIso8601String(), // Usa DateTime manualmente
+        'timestamp': DateTime.now().toUtc().toIso8601String(),
         'photoUrl': photoUrl
       };
 
-      // Adiciona o comentário ao array de comentários usando merge
       await commentsVideoCollection.doc(videoId).set({
         'comments': FieldValue.arrayUnion([commentData]),
       }, SetOptions(merge: true));
@@ -64,15 +60,11 @@ class FirestoreService {
 
   Future<List<Map<String, dynamic>>> getCommentsForVideo(String videoId) async {
     try {
-      // Recupera o documento do Firestore
       final docSnapshot = await commentsVideoCollection.doc(videoId).get();
 
-      // Verifica se o documento existe
       if (docSnapshot.exists) {
-        // Converte os dados para Map<String, dynamic>
         final data = docSnapshot.data() as Map<String, dynamic>;
 
-        // Verifica se há comentários no campo 'comments'
         if (data['comments'] != null) {
           final comments = List<Map<String, dynamic>>.from(data['comments']);
           logger.i("Successfully retrieved comments for video: $videoId");
@@ -80,7 +72,6 @@ class FirestoreService {
         }
       }
 
-      // Retorna lista vazia se não houver dados ou comentários
       logger.w("No comments found for video: $videoId");
       return [];
     } catch (e) {
@@ -91,7 +82,6 @@ class FirestoreService {
 
   Future<bool> deleteComment(String videoId, String commentId) async {
     try {
-      // Remove o comentário do array de comentários
       logger.f("Deleting comment: $commentId from video: $videoId");
       await commentsVideoCollection.doc(videoId).update({
         'comments': FieldValue.arrayRemove([commentId]),

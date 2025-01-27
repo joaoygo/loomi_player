@@ -143,7 +143,7 @@ class CardCommentWidget extends StatelessWidget {
                     children: [
                       SvgPicture.asset(AssetsConstants.iconWrite),
                       SizedBox(width: 11),
-                      Text('Editar',
+                      Text('Edit',
                           style: TextStyle(
                               color: AppColors.primaryColorText, fontSize: 13)),
                     ],
@@ -155,7 +155,7 @@ class CardCommentWidget extends StatelessWidget {
                     children: [
                       SvgPicture.asset(AssetsConstants.iconTrash),
                       SizedBox(width: 11),
-                      Text('Deletar',
+                      Text('Delete',
                           style: TextStyle(
                               color: AppColors.primaryColorText, fontSize: 13)),
                     ],
@@ -167,7 +167,7 @@ class CardCommentWidget extends StatelessWidget {
                     children: [
                       SvgPicture.asset(AssetsConstants.iconFlag),
                       SizedBox(width: 11),
-                      Text('Reportar',
+                      Text('Report',
                           style: TextStyle(
                               color: AppColors.primaryColorText, fontSize: 13)),
                     ],
