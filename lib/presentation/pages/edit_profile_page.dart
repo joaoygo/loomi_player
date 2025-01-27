@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loomi_player/core/constants/app_colors.dart';
 import 'package:loomi_player/core/constants/assets_constants.dart';
+import 'package:loomi_player/presentation/pages/profile_page.dart';
 import 'package:loomi_player/presentation/stores/edit_profile_store.dart';
 import 'package:loomi_player/presentation/widgets/primary_button.dart';
 import 'package:loomi_player/presentation/widgets/primary_input_text.dart';
@@ -50,6 +51,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
       ),
       body: Observer(builder: (_) {
+        if (_editProfileStore.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
         return SafeArea(
             child: Center(
           child: SingleChildScrollView(
@@ -140,6 +144,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: PrimaryButton(
                     ontap: () async {
+                      _editProfileStore.setUserName(_nameController.text.isEmpty
+                          ? _editProfileStore.userName
+                          : _nameController.text);
                       final success = await _editProfileStore.updateProfile();
                       if (success && context.mounted) {
                         const snackBar = SnackBar(
@@ -147,7 +154,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           backgroundColor: Colors.green,
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        Navigator.pop(context);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ProfilePage()),
+                        );
                       }
 
                       if (!success && context.mounted) {

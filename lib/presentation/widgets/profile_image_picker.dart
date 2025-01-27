@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:logger/logger.dart';
 import 'package:loomi_player/core/constants/app_colors.dart';
 import 'package:loomi_player/core/constants/assets_constants.dart';
 import 'package:path_provider/path_provider.dart';
@@ -25,7 +26,7 @@ class ProfileImagePicker extends StatefulWidget {
 
 class ProfileImagePickerState extends State<ProfileImagePicker> {
   File? _image;
-
+  var looger = Logger();
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -101,12 +102,6 @@ class ProfileImagePickerState extends State<ProfileImagePicker> {
                             border: Border.all(
                               color: Color.fromRGBO(170, 115, 240, 1),
                             ),
-                            image: _image != null
-                                ? DecorationImage(
-                                    image: FileImage(_image!),
-                                    fit: BoxFit.cover,
-                                  )
-                                : null,
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -145,12 +140,6 @@ class ProfileImagePickerState extends State<ProfileImagePicker> {
                             border: Border.all(
                               color: Color.fromRGBO(215, 215, 215, 0.6),
                             ),
-                            image: _image != null
-                                ? DecorationImage(
-                                    image: FileImage(_image!),
-                                    fit: BoxFit.cover,
-                                  )
-                                : null,
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -192,14 +181,15 @@ class ProfileImagePickerState extends State<ProfileImagePicker> {
         decoration: BoxDecoration(
           color: Color.fromRGBO(188, 76, 241, 0.2),
           borderRadius: BorderRadius.circular(widget.radius ?? 20),
-          image: _image != null
+          image: _image != null && !_image!.path.contains('https://')
               ? DecorationImage(
                   image: FileImage(_image!),
                   fit: BoxFit.cover,
                 )
-              : null,
+              : DecorationImage(
+                  image: NetworkImage(_image!.path), fit: BoxFit.cover),
         ),
-        child: _image == null
+        child: _image == null || _image!.path.isEmpty
             ? Center(
                 child: SvgPicture.asset(
                   AssetsConstants.cameraIcon,

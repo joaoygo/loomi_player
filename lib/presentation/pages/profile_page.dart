@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:loomi_player/core/constants/app_colors.dart';
 import 'package:loomi_player/core/constants/assets_constants.dart';
+import 'package:loomi_player/presentation/pages/home_page.dart';
 import 'package:loomi_player/presentation/stores/profile_store.dart';
 import 'package:loomi_player/presentation/widgets/banner_widget.dart';
 import 'package:loomi_player/presentation/widgets/custom_button_rounded_widget.dart';
@@ -21,7 +23,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final ProfileStore _profileStore = GetIt.I<ProfileStore>();
-
+  var logger = Logger();
   @override
   void initState() {
     super.initState();
@@ -39,7 +41,10 @@ class _ProfilePageState extends State<ProfilePage> {
           child: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: AppColors.primaryColor),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
             },
           ),
         ),
@@ -49,17 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: CustomButtonRoundedWidget(
                 text: 'Edit Profile',
                 onTap: () async {
-                  final hasPermisson = await _profileStore.getTypeAccount();
-                  if (hasPermisson && context.mounted) {
-                    Navigator.pushNamed(context, '/edit-profile');
-                  }
-                  if (!hasPermisson && context.mounted) {
-                    SnackBar snackBar = SnackBar(
-                      content: Text('You do not have permission to do this'),
-                      backgroundColor: Colors.red,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
+                  Navigator.pushNamed(context, '/edit-profile');
                 },
               ))
         ],
@@ -327,9 +322,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: Colors.white),
-                    onTap: () {
-                      _profileStore.clearUser();
-                      Navigator.pushReplacementNamed(context, '/login');
+                    onTap: () async {
+                      final result = await _profileStore.clearUser();
+                      if (result && context.mounted) {
+                        Navigator.pushReplacementNamed(context, '/login');
+                      } else if (!result && context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Error logging out')));
+                      }
                     }),
               )
             ],

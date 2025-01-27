@@ -88,6 +88,15 @@ class _RegisterProfilePageState extends State<RegisterProfilePage> {
                   ? CircularProgressIndicator()
                   : PrimaryButton(
                       ontap: () async {
+                        if (nameController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Please enter your name"),
+                                backgroundColor: Colors.red,
+                                duration: Duration(seconds: 3)),
+                          );
+                          return;
+                        }
                         final String uid =
                             await _registerProfileStore.getUser();
                         _registerProfileStore.setUserName(nameController.text);

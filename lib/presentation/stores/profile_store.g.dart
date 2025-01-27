@@ -76,7 +76,7 @@ mixin _$ProfileStore on ProfileStoreBase, Store {
       AsyncAction('ProfileStoreBase.clearUser', context: context);
 
   @override
-  Future<void> clearUser() {
+  Future<bool> clearUser() {
     return _$clearUserAsyncAction.run(() => super.clearUser());
   }
 

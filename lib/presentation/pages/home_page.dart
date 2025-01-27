@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:loomi_player/presentation/widgets/app_bar_custom.dart';
+import 'package:loomi_player/presentation/widgets/video_card_skeleton.dart';
 import 'package:loomi_player/presentation/widgets/video_card_widget.dart';
 import 'package:loomi_player/presentation/stores/home_store.dart';
 import 'package:get_it/get_it.dart';
@@ -14,11 +16,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeStore _store = GetIt.I<HomeStore>();
-
+  var logger = Logger();
   @override
   void initState() {
     super.initState();
     _store.getUser();
+    logger.f(_store.user?.email ?? '');
+    logger.f(_store.user?.name ?? '');
+    logger.f(_store.user?.photoUrl ?? '');
   }
 
   @override
@@ -51,15 +56,21 @@ class _HomePageState extends State<HomePage> {
           ),
           Column(
             children: [
-              AppBarCustom(
-                title: 'title',
-                nameUser: _store.user?.name,
-              ),
+              Observer(builder: (_) {
+                if (_store.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return AppBarCustom(
+                  title: 'title',
+                  nameUser: _store.user?.name,
+                  avatarImageUrl: _store.user?.photoUrl,
+                );
+              }),
               Expanded(
                 child: Observer(
                   builder: (_) {
                     if (_store.isLoading) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(child: VideoCardSkeleton());
                     }
 
                     if (_store.videos.isEmpty) {
@@ -85,17 +96,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ],
-          ),
-          Positioned(
-            bottom: 16,
-            right: 16,
-            child: FloatingActionButton(
-              onPressed: () {
-                _store.fetchVideos();
-              },
-              backgroundColor: Colors.deepPurple,
-              child: const Icon(Icons.refresh),
-            ),
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:loomi_player/domain/usecases/clear_user_usecase.dart';
 import 'package:loomi_player/domain/usecases/get_type_account_usecases.dart';
 import 'package:loomi_player/domain/usecases/get_user_id_shared_preferences_usecase.dart';
 import 'package:mobx/mobx.dart';
@@ -20,6 +21,9 @@ abstract class ProfileStoreBase with Store {
       GetIt.I<DeleteUserFirestoreUseCase>();
   final GetTypeAccountUsecases _getTypeAccountUsecases =
       GetIt.I<GetTypeAccountUsecases>();
+  final ClearUserIdSharedPreferencesUseCase
+      _clearUserIdSharedPreferencesUseCase =
+      GetIt.I<ClearUserIdSharedPreferencesUseCase>();
   var logger = Logger();
 
   @observable
@@ -73,10 +77,15 @@ abstract class ProfileStoreBase with Store {
   }
 
   @action
-  Future<void> clearUser() async {
+  Future<bool> clearUser() async {
     isLoading = true;
-    await _getUserIdSharedPreferencesUseCase();
-    isLoading = false;
+    try {
+      return await _clearUserIdSharedPreferencesUseCase();
+    } catch (e) {
+      return false;
+    } finally {
+      isLoading = false;
+    }
   }
 
   @action

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:loomi_player/core/constants/app_colors.dart';
 import 'package:loomi_player/core/constants/assets_constants.dart';
 
 class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
@@ -31,11 +34,14 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
             },
             child: CircleAvatar(
               radius: 20,
+              backgroundColor: AppColors.primaryColor,
               backgroundImage:
-                  avatarImageUrl == null ? null : NetworkImage(avatarImageUrl!),
-              backgroundColor:
-                  avatarImageUrl == null ? Colors.lightBlueAccent : null,
-              child: avatarImageUrl == null
+                  avatarImageUrl != null && avatarImageUrl!.contains('https://')
+                      ? NetworkImage(avatarImageUrl!)
+                      : avatarImageUrl != null && avatarImageUrl!.isNotEmpty
+                          ? FileImage(File(avatarImageUrl!))
+                          : null,
+              child: avatarImageUrl == null || avatarImageUrl!.isEmpty
                   ? Text(
                       nameUser?.substring(0, 1).toUpperCase() ?? '',
                       style: const TextStyle(

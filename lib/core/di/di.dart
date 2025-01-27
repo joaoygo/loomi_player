@@ -4,14 +4,18 @@ import 'package:loomi_player/core/services/auth_service.dart';
 import 'package:loomi_player/core/services/firestore_service.dart';
 import 'package:loomi_player/core/services/shared_preferences_services.dart';
 import 'package:loomi_player/data/repositories/auth_repository_impl.dart';
+import 'package:loomi_player/data/repositories/firestore_comments_repository_impl.dart';
 import 'package:loomi_player/data/repositories/firestore_user_repository_impl.dart';
 import 'package:loomi_player/data/repositories/shared_preferences_repository_impl.dart';
 import 'package:loomi_player/data/repositories/video_repository_impl.dart';
 import 'package:loomi_player/data/sources/video_api.dart';
 import 'package:loomi_player/domain/repositories/video_repository.dart';
+import 'package:loomi_player/domain/usecases/add_comment_video_usecases.dart';
 import 'package:loomi_player/domain/usecases/change_password_usecases.dart';
 import 'package:loomi_player/domain/usecases/clear_user_usecase.dart';
+import 'package:loomi_player/domain/usecases/delete_comment_video_usecases.dart';
 import 'package:loomi_player/domain/usecases/delete_user_firestore_usecase.dart';
+import 'package:loomi_player/domain/usecases/get_comment_video_usecases.dart';
 import 'package:loomi_player/domain/usecases/get_type_account_usecases.dart';
 import 'package:loomi_player/domain/usecases/get_user_firestore_usecase.dart';
 import 'package:loomi_player/domain/usecases/get_user_id_shared_preferences_usecase.dart';
@@ -31,6 +35,7 @@ import 'package:loomi_player/presentation/stores/login_store.dart';
 import 'package:loomi_player/presentation/stores/profile_store.dart';
 import 'package:loomi_player/presentation/stores/register_profile_store.dart';
 import 'package:loomi_player/presentation/stores/register_store.dart';
+import 'package:loomi_player/presentation/stores/video_detail_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
@@ -61,6 +66,9 @@ Future<void> setupDI() async {
   );
   getIt.registerLazySingleton<AuthRepositoryImpl>(
     () => AuthRepositoryImpl(getIt<AuthService>()),
+  );
+  getIt.registerLazySingleton<FirestoreCommentsRepositoryImpl>(
+    () => FirestoreCommentsRepositoryImpl(getIt<FirestoreService>()),
   );
 
   // Use Cases
@@ -106,6 +114,12 @@ Future<void> setupDI() async {
       () => ChangePasswordUsecases(getIt<AuthRepositoryImpl>()));
   getIt.registerLazySingleton<GetTypeAccountUsecases>(
       () => GetTypeAccountUsecases(getIt<AuthRepositoryImpl>()));
+  getIt.registerLazySingleton<AddCommentVideoUsecases>(
+      () => AddCommentVideoUsecases(getIt<FirestoreCommentsRepositoryImpl>()));
+  getIt.registerLazySingleton<GetCommentVideoUsecases>(
+      () => GetCommentVideoUsecases(getIt<FirestoreCommentsRepositoryImpl>()));
+  getIt.registerLazySingleton<DeleteCommentVideoUsecases>(() =>
+      DeleteCommentVideoUsecases(getIt<FirestoreCommentsRepositoryImpl>()));
 
   // Stores
   getIt.registerLazySingleton<LoginStore>(() => LoginStore());
@@ -123,4 +137,5 @@ Future<void> setupDI() async {
     () => ChangePasswordStore(),
   );
   getIt.registerLazySingleton<EditProfileStore>(() => EditProfileStore());
+  getIt.registerLazySingleton<VideoDetailStore>(() => VideoDetailStore());
 }

@@ -64,15 +64,21 @@ abstract class EditProfileStoreBase with Store {
 
   @action
   Future<void> saveUser(String uid) async {
-    isLoading = true;
-    final userModel = UserModel(
-      uid: uid,
-      email: uid,
-      name: userName,
-      photoUrl: profileImage,
-    );
-    await _saveUserFirestoreUseCase(uid, userModel.toJson());
-    isLoading = false;
+    try {
+      isLoading = true;
+      final userModel = UserModel(
+        uid: uid,
+        email: uid,
+        name: userName,
+        photoUrl: profileImage,
+      );
+      await _saveUserFirestoreUseCase(uid, userModel.toJson());
+      isLoading = false;
+    } catch (e) {
+      logger.d("Error saving user: $e");
+    } finally {
+      isLoading = false;
+    }
   }
 
   @action

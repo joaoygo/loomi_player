@@ -5,7 +5,7 @@ class ClearUserIdSharedPreferencesUseCase {
 
   ClearUserIdSharedPreferencesUseCase(this._sharedPreferencesRepository);
 
-  Future<void> call() async {
-    await _sharedPreferencesRepository.clearUserIdSharedPreferences();
+  Future<bool> call() async {
+    return await _sharedPreferencesRepository.clearUserIdSharedPreferences();
   }
 }
